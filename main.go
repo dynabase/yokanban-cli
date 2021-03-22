@@ -17,8 +17,12 @@ package main
 
 // TODO change once repo is available
 //import "github.com/dynabase/yokanban-cli/cmd"
-import "yokanban-cli/cmd"
+import (
+	"github.com/joho/godotenv"
+	"yokanban-cli/cmd"
+)
 
 func main() {
+	godotenv.Load() // read optional .env file
 	cmd.Execute()
 }

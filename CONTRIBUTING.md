@@ -16,6 +16,10 @@
 
 ## Development
 
+### Install modules
+
+    go mod download
+
 ### Run your application
 
     go run main.go
@@ -24,3 +28,5 @@
 ### Add new CLI commands
 
 see: https://github.com/spf13/cobra/blob/master/cobra/README.md#cobra-add
+
+    cobra add <command>

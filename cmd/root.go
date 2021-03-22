@@ -33,7 +33,7 @@ var rootCmd = &cobra.Command{
 	Long: `yokanban - a modern board that inspires flow and communication. 
 
 It feels like a real whiteboard, but with all the benefits of a digital tool.
-Signup and create your own board at https://yokanban.io/.`,
+In order to use this CLI please create a service account at https://yokanban.io/ and store the credentials as 'yokanban.keys.json'`,
 	// Uncomment the following line if your bare application
 	// has an action associated with it:
 	// Run: func(cmd *cobra.Command, args []string) { },
