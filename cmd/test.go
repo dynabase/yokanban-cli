@@ -16,7 +16,6 @@ limitations under the License.
 package cmd
 
 import (
-	"fmt"
 	"yokanban-cli/app/api"
 	"yokanban-cli/app/auth"
 
@@ -29,8 +28,6 @@ var testCmd = &cobra.Command{
 	Short: "Test your API credentials",
 	Long:  `Test your API credentials. If the response is "OK", everything is set up correctly.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("test called")
-
 		jwt := auth.GetServiceAccountJwt()
 		token := api.Auth(jwt)
 
