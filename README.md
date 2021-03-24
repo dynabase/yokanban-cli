@@ -8,3 +8,16 @@ A powerful command line interface for [yokanban](httsp://yokanban.io) written in
 
 ## Installation
 
+    go get github.com/dynabase/yokanban-cli
+
+## Configuration
+
+    yokanban configure
+
+## Help
+
+    yokanban help
+
+## Run commands
+
+    yokanban <command> <arg> <flags>

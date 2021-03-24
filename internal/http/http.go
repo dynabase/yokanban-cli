@@ -1,27 +1,16 @@
-package api
+package http
 
 import (
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
 	"net/url"
 	"path"
-	"yokanban-cli/app"
+	"yokanban-cli/internal/config"
 )
 
-type TokenResponse struct {
-	Data TokenData `json:"data"`
-}
-
-type TokenData struct {
-	AccessToken string `json:"access_token"`
-	ExpiresIn   int    `json:"expires_in"`
-	Scope       string `json:"scope"`
-}
-
-func Auth(jwt string) string {
+func Auth(jwt string) TokenData {
 	apiUrl := getApiUrl("/auth/oauth2/token")
 	data := url.Values{
 		"grant_type": {"urn:ietf:params:oauth:grant-type:jwt-bearer"},
@@ -37,10 +26,10 @@ func Auth(jwt string) string {
 
 	json.NewDecoder(resp.Body).Decode(&res)
 
-	return res.Data.AccessToken
+	return res.Data
 }
 
-func Get(urlPath string, token string) {
+func Get(urlPath string, token string) string {
 	apiUrl := getApiUrl(urlPath)
 
 	httpClient := &http.Client{}
@@ -52,17 +41,20 @@ func Get(urlPath string, token string) {
 	}
 	defer resp.Body.Close()
 
-	body, err := ioutil.ReadAll(resp.Body)
+	if resp.StatusCode < 200 || resp.StatusCode > 299 {
+		log.Fatal("API did not respond with expected status code")
+	}
 
+	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	fmt.Println(string(body))
+	return string(body)
 }
 
 func getApiUrl(urlPath string) string {
-	u, err := url.Parse(app.GetApiUrl())
+	u, err := url.Parse(config.GetApiUrl())
 	if err != nil {
 		log.Fatal(err)
 	}

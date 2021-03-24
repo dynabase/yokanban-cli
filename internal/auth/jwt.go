@@ -10,7 +10,7 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
-	"yokanban-cli/app"
+	"yokanban-cli/internal/config"
 )
 
 type ServiceAccountCredentials struct {
@@ -38,7 +38,7 @@ func GetServiceAccountJwt() string {
 	fmt.Printf("Create JWT for serviceAccount %s\n", serviceAccountCredentials.Id)
 	jwt := &Jwt{
 		Iss:   serviceAccountCredentials.Id,
-		Aud:   app.GetApiUrl() + "/auth/oauth2/token",
+		Aud:   config.GetApiUrl() + "/auth/oauth2/token",
 		Scope: "test user board",
 	}
 
@@ -56,7 +56,7 @@ func GetServiceAccountJwt() string {
 }
 
 func getServiceAccountCredentials() (ServiceAccountCredentials, error) {
-	apiKeyPath, err := app.GetApiKeysPath()
+	apiKeyPath, err := config.GetApiKeysPath()
 	if err != nil {
 		return ServiceAccountCredentials{}, err
 	}

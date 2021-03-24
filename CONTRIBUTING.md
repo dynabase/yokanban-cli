@@ -16,6 +16,11 @@
 
 ## Development
 
+Check the guidelines for
+
+- conventions: https://golang.org/doc/effective_go
+- directory structure: [Standard Go Project Layout](https://github.com/golang-standards/project-layout)
+
 ### Install modules
 
     go mod download
