@@ -18,8 +18,8 @@
 
 Check the guidelines for
 
-- conventions: https://golang.org/doc/effective_go
-- directory structure: [Standard Go Project Layout](https://github.com/golang-standards/project-layout)
+- Conventions: https://golang.org/doc/effective_go
+- Directory structure: [Standard Go Project Layout](https://github.com/golang-standards/project-layout)
 
 ### Install modules
 
@@ -32,6 +32,6 @@ Check the guidelines for
 
 ### Add new CLI commands
 
-see: https://github.com/spf13/cobra/blob/master/cobra/README.md#cobra-add
+See: https://github.com/spf13/cobra/blob/master/cobra/README.md#cobra-add
 
     cobra add <command>

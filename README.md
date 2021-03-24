@@ -10,14 +10,25 @@ A powerful command line interface for [yokanban](httsp://yokanban.io) written in
 
     go get github.com/dynabase/yokanban-cli
 
-## Configuration
+## Create your personal yokanban service account
 
-    yokanban configure
+- Log into https://yokanban.io
+- Create a service account
+- Download service account credentials as JSON file `yokanban.keys.json`
+- Set environment variable
 
-## Help
+
+    export YOKANBAN_API_KEYS_PATH=/<path-to>/yokanban.keys.json 
+    yokanban test
+
+## Commands
+
+yokanban cli commands are structured in following way `yokanban <command> <arg> <flags>`.
+
+### Test credentials
+
+    yokanban test
+
+### Help
 
     yokanban help
-
-## Run commands
-
-    yokanban <command> <arg> <flags>
