@@ -5,6 +5,12 @@ A powerful command line interface for [yokanban](httsp://yokanban.io) written in
 [For contributing, please read the guidelines](CONTRIBUTING.md)
 
 # Improve your developer experience
+
+---
+**_NOTE_**  
+PLANNED - NOT IMPLEMENTED YET
+---
+
 ## Keep context
 
 Develop new features without losing context due to application switches:
@@ -20,27 +26,30 @@ $ yokanban create column --name "In Review" --board MY-PROJECT
 $ yokanban create column --name "Done" --board MY-PROJECT
 
 
-# feature implementation
+# prepare feature implementation
 $ git checkout -b featureA
 
 $ yokanban create card --name featureA --description "A beautiful new feature" --board MY-PROJECT --column "ToDo" --assign-me
 FOO-1
 
-$ yokanban move card --name featureA --column "In Review"
+# start implementing
+$ yokanban move card --id "FOO-1" --column "In Progress"
 
-
-$ git commit -am "[FOO-1] add documentation"
 $ git commit -am "[FOO-1] add beautiful function A"
+$ git commit -am "[FOO-1] fix typo in beautiful function A"
+$ git commit -am "[FOO-1] add documentation"
+
+# create PR
 $ git push origin featureA
 
 Create a pull request from 'featureA' on GitHub by visiting:
 	https://github.com/MY-PROJECT/pull/new/featureA
 
-$ yokanban move card --name featureA --column "In Review"
+$ yokanban move card --id "FOO-1" --column "In Review"
 
 # PR merged into main
 
-$ yokanban move card --name featureA --column "Done"
+$ yokanban move card --id "FOO-1" --column "Done"
 ```
 
 ## Found a bug to solve later on?
