@@ -5,11 +5,12 @@ import (
 	"crypto/x509"
 	"encoding/json"
 	"encoding/pem"
-	jose "github.com/dvsekhvalnov/jose2go"
-	log "github.com/sirupsen/logrus"
 	"io/ioutil"
 	"os"
 	"yokanban-cli/internal/config"
+
+	jose "github.com/dvsekhvalnov/jose2go"
+	log "github.com/sirupsen/logrus"
 )
 
 // ServiceAccountCredentials represent credentials of a service account to create access token with.
@@ -20,22 +21,22 @@ type ServiceAccountCredentials struct {
 	PrivateKey  string `json:"privateKey"`
 }
 
-// Jwt structure of a json web token.
-type Jwt struct {
+// JWT structure of a json web token.
+type JWT struct {
 	Iss   string `json:"iss"`
 	Scope string `json:"scope"`
 	Aud   string `json:"aud"`
 }
 
-// GetServiceAccountJwt creates a JWT in order to retrieve access token from yokanban API.
-func GetServiceAccountJwt() string {
+// GetServiceAccountJWT creates a JWT in order to retrieve access token from yokanban API.
+func GetServiceAccountJWT() string {
 	serviceAccountCredentials, err := getServiceAccountCredentials()
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	log.Debug("Create JWT for serviceAccount: " + serviceAccountCredentials.ID)
-	jwt := &Jwt{
+	jwt := &JWT{
 		Iss:   serviceAccountCredentials.ID,
 		Aud:   config.GetAPIURL() + "/auth/oauth2/token",
 		Scope: "test user board",
