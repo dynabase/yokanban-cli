@@ -9,17 +9,18 @@ import (
 	"net/url"
 	"path"
 	"yokanban-cli/internal/config"
-	"yokanban-cli/internal/const"
+	"yokanban-cli/internal/consts"
 )
 
+// Auth runs an authentication call to retrieve an access token for further api communication.
 func Auth(jwt string) TokenData {
-	apiUrl := getApiUrl(_const.RouteOauthToken)
+	apiURL := getAPIURL(consts.RouteOauthToken)
 	data := url.Values{
 		"grant_type": {"urn:ietf:params:oauth:grant-type:jwt-bearer"},
 		"assertion":  {jwt},
 	}
 
-	resp, err := http.PostForm(apiUrl, data)
+	resp, err := http.PostForm(apiURL, data)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -31,11 +32,12 @@ func Auth(jwt string) TokenData {
 	return res.Data
 }
 
+// Get runs a HTTP GET call to an API urlPath. Authentication is done via Bearer token.
 func Get(urlPath string, token string) (string, error) {
-	apiUrl := getApiUrl(urlPath)
+	apiURL := getAPIURL(urlPath)
 
 	httpClient := &http.Client{}
-	req, _ := http.NewRequest("GET", apiUrl, nil)
+	req, _ := http.NewRequest("GET", apiURL, nil)
 	req.Header.Set("Authorization", "Bearer "+token)
 	resp, err := httpClient.Do(req)
 	if err != nil {
@@ -55,8 +57,8 @@ func Get(urlPath string, token string) (string, error) {
 	return string(body), nil
 }
 
-func getApiUrl(urlPath string) string {
-	u, err := url.Parse(config.GetApiUrl())
+func getAPIURL(urlPath string) string {
+	u, err := url.Parse(config.GetAPIURL())
 	if err != nil {
 		log.Fatal(err)
 	}

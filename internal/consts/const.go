@@ -1,5 +1,6 @@
-package _const
+package consts
 
+// api routes
 const (
 	RouteOauthToken = "/auth/oauth2/token"
 	RouteOauthTest  = "/auth/oauth2/test"
@@ -10,6 +11,7 @@ const (
 	RouteMetric     = "/metrics"
 )
 
+// token
 const (
 	CachedTokenFilename = "token.cached.json"
 )

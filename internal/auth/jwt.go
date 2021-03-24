@@ -12,32 +12,32 @@ import (
 	"yokanban-cli/internal/config"
 )
 
+// ServiceAccountCredentials represent credentials of a service account to create access token with.
 type ServiceAccountCredentials struct {
-	Id          string `json:"id"`
+	ID          string `json:"id"`
 	Description string `json:"description"`
 	PublicKey   string `json:"publicKey"`
 	PrivateKey  string `json:"privateKey"`
 }
 
+// Jwt structure of a json web token.
 type Jwt struct {
 	Iss   string `json:"iss"`
 	Scope string `json:"scope"`
 	Aud   string `json:"aud"`
 }
 
-/**
-Create a JWT in order to retrieve access token from yokanban API.
-*/
+// GetServiceAccountJwt creates a JWT in order to retrieve access token from yokanban API.
 func GetServiceAccountJwt() string {
 	serviceAccountCredentials, err := getServiceAccountCredentials()
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	log.Debug("Create JWT for serviceAccount: " + serviceAccountCredentials.Id)
+	log.Debug("Create JWT for serviceAccount: " + serviceAccountCredentials.ID)
 	jwt := &Jwt{
-		Iss:   serviceAccountCredentials.Id,
-		Aud:   config.GetApiUrl() + "/auth/oauth2/token",
+		Iss:   serviceAccountCredentials.ID,
+		Aud:   config.GetAPIURL() + "/auth/oauth2/token",
 		Scope: "test user board",
 	}
 
@@ -55,7 +55,7 @@ func GetServiceAccountJwt() string {
 }
 
 func getServiceAccountCredentials() (ServiceAccountCredentials, error) {
-	apiKeyPath, err := config.GetApiKeysPath()
+	apiKeyPath, err := config.GetAPIKeysPath()
 	if err != nil {
 		return ServiceAccountCredentials{}, err
 	}

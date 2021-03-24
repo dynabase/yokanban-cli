@@ -7,24 +7,24 @@ import (
 	"os"
 )
 
-func GetApiUrl() string {
+// GetAPIURL retrieves the url of the yokanban HTTP API.
+func GetAPIURL() string {
 	if value, ok := os.LookupEnv("YOKANBAN_API_URL"); ok {
 		return value
 	}
 	return "https://api.yokanban.io"
 }
 
-func GetApiKeysPath() (string, error) {
+//GetAPIKeysPath retrieves the path to the API keys of a service account.
+func GetAPIKeysPath() (string, error) {
 	if value, ok := os.LookupEnv("YOKANBAN_API_KEYS_PATH"); ok {
 		return value, nil
 	}
 	return "", errors.New("env var YOKANBAN_API_KEYS_PATH not defined")
 }
 
-/*
-The application log level.
-e.g.: trace, debug, info, warn, error, fatal, panic
-*/
+// GetLogLevel retrieves the application log level.
+// e.g. trace, debug, info, warn, error, fatal, panic
 func GetLogLevel() logrus.Level {
 	if value, ok := os.LookupEnv("YOKANBAN_LOGLEVEL"); ok {
 		level, err := logrus.ParseLevel(value)
@@ -37,6 +37,7 @@ func GetLogLevel() logrus.Level {
 	return GetDefaultLogLevel()
 }
 
+// GetDefaultLogLevel retrieves the default application loglevel.
 func GetDefaultLogLevel() logrus.Level {
 	return logrus.WarnLevel
 }

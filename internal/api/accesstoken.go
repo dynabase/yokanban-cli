@@ -7,14 +7,12 @@ import (
 	"os"
 	"path"
 	"yokanban-cli/internal/auth"
-	"yokanban-cli/internal/const"
+	"yokanban-cli/internal/consts"
 	"yokanban-cli/internal/http"
 	"yokanban-cli/internal/utils"
 )
 
-/**
-Retrieves either an access token from cache or creates a new one.
-*/
+// GetAccessToken retrieves either an access token from cache or creates a new one.
 func GetAccessToken() string {
 	log.Debug("getAccessToken")
 	if cachedToken := getCachedAccessToken(); cachedToken != "" {
@@ -35,7 +33,7 @@ func getCachedAccessToken() string {
 		return ""
 	}
 
-	jsonFile, err := os.Open(getCachedAccessTokenFileUri())
+	jsonFile, err := os.Open(getCachedAccessTokenFileURI())
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -61,26 +59,26 @@ func createNewAccessToken() string {
 	tokenData := http.Auth(jwt)
 
 	// persist token to configuration directory for caching purposes
-	tokenDataJson, _ := json.Marshal(tokenData)
-	if err := ioutil.WriteFile(getCachedAccessTokenFileUri(), tokenDataJson, 0700); err != nil {
+	tokenDataJSON, _ := json.Marshal(tokenData)
+	if err := ioutil.WriteFile(getCachedAccessTokenFileURI(), tokenDataJSON, 0700); err != nil {
 		log.Fatal(err)
 	}
 
 	return tokenData.AccessToken
 }
 
-func getCachedAccessTokenFileUri() string {
-	log.Debug("getCachedAccessTokenFileUri")
-	accessTokenFileUri := path.Join(utils.GetConfigDir(), _const.CachedTokenFilename)
-	return accessTokenFileUri
+func getCachedAccessTokenFileURI() string {
+	log.Debug("getCachedAccessTokenFileURI")
+	accessTokenFileURI := path.Join(utils.GetConfigDir(), consts.CachedTokenFilename)
+	return accessTokenFileURI
 }
 
 func existsCachedAccessToken() (bool, error) {
 	log.Debug("existsCachedAccessToken")
-	accessTokenFileUri := getCachedAccessTokenFileUri()
-	log.Debug("\t existsCachedAccessToken - check: " + accessTokenFileUri)
+	accessTokenFileURI := getCachedAccessTokenFileURI()
+	log.Debug("\t existsCachedAccessToken - check: " + accessTokenFileURI)
 
-	stat, err := os.Stat(accessTokenFileUri)
+	stat, err := os.Stat(accessTokenFileURI)
 	if err == nil {
 		if stat != nil {
 			log.Debug("\t\t existsCachedAccessToken - cached access token exists")

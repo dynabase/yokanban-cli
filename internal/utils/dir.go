@@ -7,9 +7,7 @@ import (
 	"path"
 )
 
-/**
-Retrieves the OS specific home directory of the current user.
-*/
+// GetUserHomeDir retrieves the OS specific home directory of the current user.
 func GetUserHomeDir() string {
 	dir, err := homedir.Dir()
 	if err != nil {
@@ -18,9 +16,7 @@ func GetUserHomeDir() string {
 	return dir
 }
 
-/**
-Checks whether a directory exists or not.
-*/
+// ExistsDir checks whether a directory exists or not.
 func ExistsDir(dir string) (bool, error) {
 	stat, err := os.Stat(dir)
 	if err == nil {
@@ -35,9 +31,7 @@ func ExistsDir(dir string) (bool, error) {
 	return false, err
 }
 
-/**
-Retrieves the yokanban configuration directory. It will be created if it doesn't exist.
-*/
+// GetConfigDir retrieves the yokanban configuration directory. It will be created if it doesn't exist.
 func GetConfigDir() string {
 	homeDir := GetUserHomeDir()
 	configDir := path.Join(homeDir, ".yokanban")

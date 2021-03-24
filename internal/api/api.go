@@ -3,7 +3,7 @@ package api
 import (
 	"fmt"
 	log "github.com/sirupsen/logrus"
-	"yokanban-cli/internal/const"
+	"yokanban-cli/internal/consts"
 	"yokanban-cli/internal/http"
 )
 
@@ -13,25 +13,26 @@ type requestParam struct {
 	maxRetries int
 }
 
-func List() {
-	// TODO to implement
-}
+//func List() {
+//	// TODO to implement
+//}
+//
+//func Get() {
+//	// TODO to implement
+//}
+//
+//func Create() {
+//	// TODO to implement
+//}
+//
+//func Delete() {
+//	// TODO to implement
+//}
 
-func Get() {
-	// TODO to implement
-}
-
-func Create() {
-	// TODO to implement
-}
-
-func Delete() {
-	// TODO to implement
-}
-
+// Test runs an API call to test current credentials
 func Test() {
 	log.Debug("Test()")
-	body := runGetRequest(requestParam{route: _const.RouteOauthTest, retries: 0, maxRetries: 2})
+	body := runGetRequest(requestParam{route: consts.RouteOauthTest, retries: 0, maxRetries: 2})
 	fmt.Println(body)
 }
 
