@@ -1,3 +1,10 @@
+all: clean build-release
+
+clean:
+	go clean
+	rm -rf ./build
+	rm -f coverage.out
+
 run:
 	go run main.go
 
@@ -11,10 +18,12 @@ test:
 test-dev:
 	go test ./... -failfast -cover
 
-build-release:
-	env CGO_ENABLED=0 go build -a -ldflags '-extldflags "-static"' -o build/main_linux
+build-release: clean
+	env CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -a -ldflags '-extldflags "-static"' -o build/yokanban_linux
 
 install:
 	go build -o yokanban
 	@mv yokanban ${GOPATH}/bin/
 	@echo "Run 'yokanban help' for further instructions..."
+
+.PHONY: all clean run lint test test-dev build-release install
