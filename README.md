@@ -91,10 +91,14 @@ yokanban test
 
 yokanban cli commands are structured in following way `yokanban <command> <arg> <flags>`.
 
+### Help
+
+    yokanban help
+
 ### Test credentials
 
     yokanban test
 
-### Help
+### Create board
 
-    yokanban help
+    yokanban create board
