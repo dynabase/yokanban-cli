@@ -35,3 +35,9 @@ Check the guidelines for
 See: https://github.com/spf13/cobra/blob/master/cobra/README.md#cobra-add
 
     cobra add <command>
+
+### Linting
+
+Ensure your changes follow linting rules
+
+    make lint
