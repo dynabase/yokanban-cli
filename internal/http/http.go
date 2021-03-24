@@ -9,10 +9,11 @@ import (
 	"net/url"
 	"path"
 	"yokanban-cli/internal/config"
+	"yokanban-cli/internal/const"
 )
 
 func Auth(jwt string) TokenData {
-	apiUrl := getApiUrl("/auth/oauth2/token")
+	apiUrl := getApiUrl(_const.RouteOauthToken)
 	data := url.Values{
 		"grant_type": {"urn:ietf:params:oauth:grant-type:jwt-bearer"},
 		"assertion":  {jwt},

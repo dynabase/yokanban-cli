@@ -7,6 +7,7 @@ import (
 	"os"
 	"path"
 	"yokanban-cli/internal/auth"
+	"yokanban-cli/internal/const"
 	"yokanban-cli/internal/http"
 	"yokanban-cli/internal/utils"
 )
@@ -70,7 +71,7 @@ func createNewAccessToken() string {
 
 func getCachedAccessTokenFileUri() string {
 	log.Debug("getCachedAccessTokenFileUri")
-	accessTokenFileUri := path.Join(utils.GetConfigDir(), CachedTokenFilename)
+	accessTokenFileUri := path.Join(utils.GetConfigDir(), _const.CachedTokenFilename)
 	return accessTokenFileUri
 }
 

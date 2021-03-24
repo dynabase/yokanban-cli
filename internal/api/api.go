@@ -3,6 +3,7 @@ package api
 import (
 	"fmt"
 	log "github.com/sirupsen/logrus"
+	"yokanban-cli/internal/const"
 	"yokanban-cli/internal/http"
 )
 
@@ -30,7 +31,7 @@ func Delete() {
 
 func Test() {
 	log.Debug("Test()")
-	body := runGetRequest(requestParam{route: RouteTest, retries: 0, maxRetries: 2})
+	body := runGetRequest(requestParam{route: _const.RouteOauthTest, retries: 0, maxRetries: 2})
 	fmt.Println(body)
 }
 
