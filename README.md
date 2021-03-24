@@ -6,10 +6,9 @@ A powerful command line interface for [yokanban](httsp://yokanban.io) written in
 
 # Improve your developer experience
 
----
-**_NOTE_**  
-PLANNED - NOT IMPLEMENTED YET
----
+
+**_NOTE:_** planned - not implemented yet
+
 
 ## Keep context
 
