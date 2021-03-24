@@ -5,14 +5,15 @@
 - [Go](https://golang.org/doc/install)
 - [Cobra library](https://github.com/spf13/cobra#readme)
 
+```
+go get -u github.com/spf13/cobra
+```
 
-    go get -u github.com/spf13/cobra
-    
 -  [Cobra generator](https://github.com/spf13/cobra/blob/master/cobra/README.md)
 
-
-    go get -u github.com/spf13/cobra/cobra
-
+```
+go get -u github.com/spf13/cobra/cobra
+```
 
 ## Development
 

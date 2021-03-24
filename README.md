@@ -17,9 +17,10 @@ A powerful command line interface for [yokanban](httsp://yokanban.io) written in
 - Download service account credentials as JSON file `yokanban.keys.json`
 - Set environment variable
 
-
-    export YOKANBAN_API_KEYS_PATH=/<path-to>/yokanban.keys.json 
-    yokanban test
+```
+export YOKANBAN_API_KEYS_PATH=/path/to/your/yokanban.keys.json 
+yokanban test
+```
 
 ## Commands
 
