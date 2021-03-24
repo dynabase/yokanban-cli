@@ -8,7 +8,16 @@ A powerful command line interface for [yokanban](httsp://yokanban.io) written in
 
 ## Installation
 
-    go get github.com/dynabase/yokanban-cli
+Clone the repo and run
+
+    make install
+
+Make sure your `${GOPATH}/bin` directory is within your `$PATH` variable.
+See https://golang.org/doc/gopath_code#GOPATH
+
+Afterwards the command `yokanban` should be available. Just test it by running
+
+    yokanban help
 
 ## Create your personal yokanban service account
 

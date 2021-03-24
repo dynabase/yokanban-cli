@@ -14,3 +14,7 @@ test-dev:
 build-release:
 	env CGO_ENABLED=0 go build -a -ldflags '-extldflags "-static"' -o build/main_linux
 
+install:
+	go build -o yokanban
+	@mv yokanban ${GOPATH}/bin/
+	@echo "Run 'yokanban help' for further instructions..."
