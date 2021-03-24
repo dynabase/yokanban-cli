@@ -55,7 +55,7 @@ func getCachedAccessToken() string {
 
 func createNewAccessToken() string {
 	log.Debug("createNewAccessToken")
-	jwt := auth.GetServiceAccountJwt()
+	jwt := auth.GetServiceAccountJWT()
 	tokenData := http.Auth(jwt)
 
 	// persist token to configuration directory for caching purposes
