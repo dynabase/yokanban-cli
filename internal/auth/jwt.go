@@ -5,10 +5,9 @@ import (
 	"crypto/x509"
 	"encoding/json"
 	"encoding/pem"
-	"fmt"
 	jose "github.com/dvsekhvalnov/jose2go"
+	log "github.com/sirupsen/logrus"
 	"io/ioutil"
-	"log"
 	"os"
 	"yokanban-cli/internal/config"
 )
@@ -35,7 +34,7 @@ func GetServiceAccountJwt() string {
 		log.Fatal(err)
 	}
 
-	fmt.Printf("Create JWT for serviceAccount %s\n", serviceAccountCredentials.Id)
+	log.Debug("Create JWT for serviceAccount: " + serviceAccountCredentials.Id)
 	jwt := &Jwt{
 		Iss:   serviceAccountCredentials.Id,
 		Aud:   config.GetApiUrl() + "/auth/oauth2/token",

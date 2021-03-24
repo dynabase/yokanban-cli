@@ -19,10 +19,13 @@ package main
 //import "github.com/dynabase/yokanban-cli/cmd"
 import (
 	"github.com/joho/godotenv"
+	log "github.com/sirupsen/logrus"
 	"yokanban-cli/cmd"
+	"yokanban-cli/internal/config"
 )
 
 func main() {
 	godotenv.Load() // read optional .env file
+	log.SetLevel(config.GetLogLevel())
 	cmd.Execute()
 }

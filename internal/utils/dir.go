@@ -2,7 +2,7 @@ package utils
 
 import (
 	"github.com/mitchellh/go-homedir"
-	"log"
+	log "github.com/sirupsen/logrus"
 	"os"
 	"path"
 )

@@ -2,8 +2,8 @@ package http
 
 import (
 	"encoding/json"
+	log "github.com/sirupsen/logrus"
 	"io/ioutil"
-	"log"
 	"net/http"
 	"net/url"
 	"path"

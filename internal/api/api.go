@@ -2,6 +2,7 @@ package api
 
 import (
 	"fmt"
+	log "github.com/sirupsen/logrus"
 	"yokanban-cli/internal/http"
 )
 
@@ -22,7 +23,7 @@ func Delete() {
 }
 
 func Test() {
-	fmt.Println("Test()")
+	log.Debug("Test()")
 	token := GetAccessToken()
 	body := http.Get(RouteTest, token)
 
