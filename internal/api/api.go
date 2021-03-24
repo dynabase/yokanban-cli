@@ -6,6 +6,12 @@ import (
 	"yokanban-cli/internal/http"
 )
 
+type requestParam struct {
+	route      string
+	retries    int
+	maxRetries int
+}
+
 func List() {
 	// TODO to implement
 }
@@ -24,8 +30,24 @@ func Delete() {
 
 func Test() {
 	log.Debug("Test()")
-	token := GetAccessToken()
-	body := http.Get(RouteTest, token)
-
+	body := runGetRequest(requestParam{route: RouteTest, retries: 0, maxRetries: 2})
 	fmt.Println(body)
+}
+
+func runGetRequest(param requestParam) string {
+	token := GetAccessToken()
+	body, err := http.Get(param.route, token)
+	if err != nil {
+		if param.retries > param.maxRetries {
+			log.Fatalf("Max retries of route %s reached", param.route)
+		}
+
+		// maybe token not valid anymore, create new one (will be cached for further requests)
+		createNewAccessToken()
+
+		// retry
+		retries := param.retries + 1
+		return runGetRequest(requestParam{route: param.route, retries: retries})
+	}
+	return body
 }

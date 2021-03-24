@@ -2,6 +2,7 @@ package http
 
 import (
 	"encoding/json"
+	"errors"
 	log "github.com/sirupsen/logrus"
 	"io/ioutil"
 	"net/http"
@@ -29,7 +30,7 @@ func Auth(jwt string) TokenData {
 	return res.Data
 }
 
-func Get(urlPath string, token string) string {
+func Get(urlPath string, token string) (string, error) {
 	apiUrl := getApiUrl(urlPath)
 
 	httpClient := &http.Client{}
@@ -42,7 +43,7 @@ func Get(urlPath string, token string) string {
 	defer resp.Body.Close()
 
 	if resp.StatusCode < 200 || resp.StatusCode > 299 {
-		log.Fatal("API did not respond with expected status code")
+		return "", errors.New("API did not respond with expected status code")
 	}
 
 	body, err := ioutil.ReadAll(resp.Body)
@@ -50,7 +51,7 @@ func Get(urlPath string, token string) string {
 		log.Fatal(err)
 	}
 
-	return string(body)
+	return string(body), nil
 }
 
 func getApiUrl(urlPath string) string {
