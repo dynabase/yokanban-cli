@@ -1,69 +1,66 @@
 package api
 
 import (
+	"encoding/json"
 	"fmt"
 	log "github.com/sirupsen/logrus"
 	"yokanban-cli/internal/consts"
-	"yokanban-cli/internal/elements"
 	"yokanban-cli/internal/http"
 )
 
+type requestMethod string
+
+const (
+	post  requestMethod = "post"
+	get   requestMethod = "get"
+	patch requestMethod = "patch"
+)
+
 type requestOptions struct {
+	method     requestMethod
 	retries    int
 	maxRetries int
 }
 
-//func List() {
-//	// TODO to implement
-//}
-//
-//func Get() {
-//	// TODO to implement
-//}
-//
-//func Delete() {
-//	// TODO to implement
-//}
+// CreateBoardModel describes all attributes of a board to be created.
+type CreateBoardModel struct {
+	Name string `json:"name,omitempty"`
+}
 
-// Create runs an API call to create a yokanban resource.
-func Create(ele elements.YoElement) {
-	log.Debugf("Create(%s)", ele)
-	if ele == elements.Board {
-		body := runPostRequest(consts.RouteBoard, "{}", requestOptions{retries: 0, maxRetries: 2})
-		fmt.Println(body)
-	} else {
-		log.Fatalf("Creating of %s not implemented yet", ele)
+// CreateBoard runs an API call to create a yokanban board.
+func CreateBoard(model CreateBoardModel) {
+	log.Debugf("CreateBoard()")
+	payload, err := json.Marshal(model)
+	if err != nil {
+		log.Fatal(err)
 	}
+	body := runHTTPRequest(consts.RouteBoard, string(payload), requestOptions{retries: 0, maxRetries: 2, method: post})
+	fmt.Println(body)
 }
 
 // Test runs an API call to test current credentials
 func Test() {
 	log.Debug("Test()")
-	body := runGetRequest(consts.RouteOauthTest, requestOptions{retries: 0, maxRetries: 2})
+	body := runHTTPRequest(consts.RouteOauthTest, "", requestOptions{retries: 0, maxRetries: 2, method: get})
 	fmt.Println(body)
 }
 
-func runGetRequest(route string, options requestOptions) string {
+func runHTTPRequest(route string, jsonBody string, options requestOptions) string {
+	var body string
+	var err error
 	token := GetAccessToken()
-	body, err := http.Get(route, token)
-	if err != nil {
-		if options.retries > options.maxRetries {
-			log.Fatalf("Max retries of route %s reached", route)
-		}
 
-		// maybe token not valid anymore, create new one (will be cached for further requests)
-		createNewAccessToken()
-
-		// retry
-		retries := options.retries + 1
-		return runGetRequest(route, requestOptions{retries: retries, maxRetries: options.maxRetries})
+	switch method := options.method; method {
+	case get:
+		body, err = http.Get(route, token)
+	case post:
+		body, err = http.Post(route, token, jsonBody)
+	case patch:
+		body, err = http.Patch(route, token, jsonBody)
+	default:
+		log.Fatalf("Method %s not implemented", method)
 	}
-	return body
-}
 
-func runPostRequest(route string, jsonBody string, options requestOptions) string {
-	token := GetAccessToken()
-	body, err := http.Post(route, token, jsonBody)
 	if err != nil {
 		if options.retries > options.maxRetries {
 			log.Fatalf("Max retries of route %s reached", route)
@@ -74,7 +71,7 @@ func runPostRequest(route string, jsonBody string, options requestOptions) strin
 
 		// retry
 		retries := options.retries + 1
-		return runPostRequest(route, jsonBody, requestOptions{retries: retries, maxRetries: options.maxRetries})
+		return runHTTPRequest(route, jsonBody, requestOptions{retries: retries, maxRetries: options.maxRetries, method: options.method})
 	}
 	return body
 }
