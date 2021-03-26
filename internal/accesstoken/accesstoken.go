@@ -1,4 +1,4 @@
-package api
+package accesstoken
 
 import (
 	"encoding/json"
@@ -12,14 +12,29 @@ import (
 	"yokanban-cli/internal/utils"
 )
 
-// GetAccessToken retrieves either an access token from cache or creates a new one.
-func GetAccessToken() string {
-	log.Debug("getAccessToken")
+// Get retrieves either an access token from cache or creates a new one.
+func Get() string {
+	log.Debug("Get")
 	if cachedToken := getCachedAccessToken(); cachedToken != "" {
-		log.Debug("\t getAccessToken - return cached access token")
+		log.Debug("\t Get - return cached access token")
 		return cachedToken
 	}
-	return createNewAccessToken()
+	return Refresh()
+}
+
+// Refresh creates a new access token and overwrites cached one.
+func Refresh() string {
+	log.Debug("Refresh")
+	jwt := auth.GetServiceAccountJWT()
+	tokenData := http.Auth(jwt)
+
+	// persist token to configuration directory for caching purposes
+	tokenDataJSON, _ := json.Marshal(tokenData)
+	if err := ioutil.WriteFile(getCachedAccessTokenFileURI(), tokenDataJSON, 0700); err != nil {
+		log.Fatal(err)
+	}
+
+	return tokenData.AccessToken
 }
 
 func getCachedAccessToken() string {
@@ -51,20 +66,6 @@ func getCachedAccessToken() string {
 	}
 
 	return accessTokenData.AccessToken
-}
-
-func createNewAccessToken() string {
-	log.Debug("createNewAccessToken")
-	jwt := auth.GetServiceAccountJWT()
-	tokenData := http.Auth(jwt)
-
-	// persist token to configuration directory for caching purposes
-	tokenDataJSON, _ := json.Marshal(tokenData)
-	if err := ioutil.WriteFile(getCachedAccessTokenFileURI(), tokenDataJSON, 0700); err != nil {
-		log.Fatal(err)
-	}
-
-	return tokenData.AccessToken
 }
 
 func getCachedAccessTokenFileURI() string {

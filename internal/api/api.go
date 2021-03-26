@@ -5,6 +5,7 @@ import (
 	"fmt"
 	log "github.com/sirupsen/logrus"
 	"net/http"
+	"yokanban-cli/internal/accesstoken"
 	"yokanban-cli/internal/consts"
 	yohttp "yokanban-cli/internal/http"
 )
@@ -50,7 +51,7 @@ func Test() {
 func runHTTPRequest(route string, jsonBody string, options requestOptions) string {
 	var body string
 	var err error
-	token := GetAccessToken()
+	token := accesstoken.Get()
 
 	switch method := options.method; method {
 	case get:
@@ -69,7 +70,7 @@ func runHTTPRequest(route string, jsonBody string, options requestOptions) strin
 		}
 
 		// maybe token not valid anymore, create new one (will be cached for further requests)
-		createNewAccessToken()
+		accesstoken.Refresh()
 
 		// retry
 		retries := options.retries + 1
