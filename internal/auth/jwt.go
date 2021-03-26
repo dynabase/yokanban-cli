@@ -39,7 +39,7 @@ func GetServiceAccountJWT() string {
 	jwt := &JWT{
 		Iss:   serviceAccountCredentials.ID,
 		Aud:   config.GetAPIURL() + "/auth/oauth2/token",
-		Scope: "test user board",
+		Scope: config.GetAPIScope(),
 	}
 
 	payload, err := json.Marshal(jwt)

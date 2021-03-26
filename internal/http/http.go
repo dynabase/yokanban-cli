@@ -44,7 +44,7 @@ func Get(urlPath string, token string) (string, error) {
 	return runHTTPCall(httpClient, req)
 }
 
-// Post runs a HTTP POST request to an API rulPath. Authentication is done via Bearer token.
+// Post runs a HTTP POST request to an API urlPath. Authentication is done via Bearer token.
 func Post(urlPath string, token string, jsonBody string) (string, error) {
 	apiURL := getAPIURL(urlPath)
 
@@ -52,6 +52,20 @@ func Post(urlPath string, token string, jsonBody string) (string, error) {
 
 	httpClient := &http.Client{}
 	req, _ := http.NewRequest("POST", apiURL, bytes.NewBuffer(jsonStr))
+	req.Header.Set("Authorization", "Bearer "+token)
+	req.Header.Set("Content-Type", "application/json")
+
+	return runHTTPCall(httpClient, req)
+}
+
+// Patch runs a HTTP PATCH request to an API urlPath. Authentication is done via Bearer token.
+func Patch(urlPath string, token string, jsonBody string) (string, error) {
+	apiURL := getAPIURL(urlPath)
+
+	var jsonStr = []byte(jsonBody)
+
+	httpClient := &http.Client{}
+	req, _ := http.NewRequest("PATCH", apiURL, bytes.NewBuffer(jsonStr))
 	req.Header.Set("Authorization", "Bearer "+token)
 	req.Header.Set("Content-Type", "application/json")
 
