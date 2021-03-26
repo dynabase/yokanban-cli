@@ -48,7 +48,7 @@ func (h *HTTP) Auth(jwt string) TokenData {
 func (h *HTTP) Get(urlPath string, token string) (string, error) {
 	apiURL := getAPIURL(urlPath)
 
-	req, _ := http.NewRequest("GET", apiURL, nil)
+	req, _ := http.NewRequest(http.MethodGet, apiURL, nil)
 	req.Header.Set("Authorization", "Bearer "+token)
 
 	return runHTTPCall(h.Client, req)
@@ -60,7 +60,7 @@ func (h *HTTP) Post(urlPath string, token string, jsonBody string) (string, erro
 
 	var jsonStr = []byte(jsonBody)
 
-	req, _ := http.NewRequest("POST", apiURL, bytes.NewBuffer(jsonStr))
+	req, _ := http.NewRequest(http.MethodPost, apiURL, bytes.NewBuffer(jsonStr))
 	req.Header.Set("Authorization", "Bearer "+token)
 	req.Header.Set("Content-Type", "application/json")
 
@@ -73,7 +73,7 @@ func (h *HTTP) Patch(urlPath string, token string, jsonBody string) (string, err
 
 	var jsonStr = []byte(jsonBody)
 
-	req, _ := http.NewRequest("PATCH", apiURL, bytes.NewBuffer(jsonStr))
+	req, _ := http.NewRequest(http.MethodPatch, apiURL, bytes.NewBuffer(jsonStr))
 	req.Header.Set("Authorization", "Bearer "+token)
 	req.Header.Set("Content-Type", "application/json")
 
