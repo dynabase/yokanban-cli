@@ -4,11 +4,12 @@ import (
 	"encoding/json"
 	log "github.com/sirupsen/logrus"
 	"io/ioutil"
+	"net/http"
 	"os"
 	"path"
 	"yokanban-cli/internal/auth"
 	"yokanban-cli/internal/consts"
-	"yokanban-cli/internal/http"
+	yohttp "yokanban-cli/internal/http"
 	"yokanban-cli/internal/utils"
 )
 
@@ -26,7 +27,8 @@ func Get() string {
 func Refresh() string {
 	log.Debug("Refresh")
 	jwt := auth.GetServiceAccountJWT()
-	tokenData := http.Auth(jwt)
+	h := yohttp.HTTP{Client: &http.Client{}}
+	tokenData := h.Auth(jwt)
 
 	// persist token to configuration directory for caching purposes
 	tokenDataJSON, _ := json.Marshal(tokenData)
@@ -59,7 +61,7 @@ func getCachedAccessToken() string {
 		log.Fatal(err)
 	}
 
-	var accessTokenData http.TokenData
+	var accessTokenData yohttp.TokenData
 
 	if err := json.Unmarshal(byteValue, &accessTokenData); err != nil {
 		log.Fatal(err)

@@ -52,14 +52,15 @@ func runHTTPRequest(route string, jsonBody string, options requestOptions) strin
 	var body string
 	var err error
 	token := accesstoken.Get()
+	h := yohttp.HTTP{Client: &http.Client{}}
 
 	switch method := options.method; method {
 	case get:
-		body, err = yohttp.Get(route, token)
+		body, err = h.Get(route, token)
 	case post:
-		body, err = yohttp.Post(route, token, jsonBody)
+		body, err = h.Post(route, token, jsonBody)
 	case patch:
-		body, err = yohttp.Patch(route, token, jsonBody)
+		body, err = h.Patch(route, token, jsonBody)
 	default:
 		log.Fatalf("Method %s not implemented", method)
 	}

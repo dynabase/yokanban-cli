@@ -9,67 +9,75 @@ import (
 	"net/http"
 	"net/url"
 	"path"
+	"strings"
 	"yokanban-cli/internal/config"
 	"yokanban-cli/internal/consts"
 )
 
+// HTTP the basic struct.
+type HTTP struct {
+	Client *http.Client
+}
+
 // Auth runs an authentication call to retrieve an access token for further api communication.
-func Auth(jwt string) TokenData {
+func (h *HTTP) Auth(jwt string) TokenData {
 	apiURL := getAPIURL(consts.RouteOauthToken)
 	data := url.Values{
 		"grant_type": {"urn:ietf:params:oauth:grant-type:jwt-bearer"},
 		"assertion":  {jwt},
 	}
 
-	resp, err := http.PostForm(apiURL, data)
+	req, _ := http.NewRequest(http.MethodPost, apiURL, strings.NewReader(data.Encode()))
+	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+
+	body, err := runHTTPCall(h.Client, req)
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	var res TokenResponse
 
-	json.NewDecoder(resp.Body).Decode(&res)
+	if err := json.NewDecoder(strings.NewReader(body)).Decode(&res); err != nil {
+		log.Fatal(err)
+	}
 
 	return res.Data
 }
 
 // Get runs a HTTP GET request to an API urlPath. Authentication is done via Bearer token.
-func Get(urlPath string, token string) (string, error) {
+func (h *HTTP) Get(urlPath string, token string) (string, error) {
 	apiURL := getAPIURL(urlPath)
 
-	httpClient := &http.Client{}
 	req, _ := http.NewRequest("GET", apiURL, nil)
 	req.Header.Set("Authorization", "Bearer "+token)
 
-	return runHTTPCall(httpClient, req)
+	return runHTTPCall(h.Client, req)
 }
 
 // Post runs a HTTP POST request to an API urlPath. Authentication is done via Bearer token.
-func Post(urlPath string, token string, jsonBody string) (string, error) {
+func (h *HTTP) Post(urlPath string, token string, jsonBody string) (string, error) {
 	apiURL := getAPIURL(urlPath)
 
 	var jsonStr = []byte(jsonBody)
 
-	httpClient := &http.Client{}
 	req, _ := http.NewRequest("POST", apiURL, bytes.NewBuffer(jsonStr))
 	req.Header.Set("Authorization", "Bearer "+token)
 	req.Header.Set("Content-Type", "application/json")
 
-	return runHTTPCall(httpClient, req)
+	return runHTTPCall(h.Client, req)
 }
 
 // Patch runs a HTTP PATCH request to an API urlPath. Authentication is done via Bearer token.
-func Patch(urlPath string, token string, jsonBody string) (string, error) {
+func (h *HTTP) Patch(urlPath string, token string, jsonBody string) (string, error) {
 	apiURL := getAPIURL(urlPath)
 
 	var jsonStr = []byte(jsonBody)
 
-	httpClient := &http.Client{}
 	req, _ := http.NewRequest("PATCH", apiURL, bytes.NewBuffer(jsonStr))
 	req.Header.Set("Authorization", "Bearer "+token)
 	req.Header.Set("Content-Type", "application/json")
 
-	return runHTTPCall(httpClient, req)
+	return runHTTPCall(h.Client, req)
 }
 
 func getAPIURL(urlPath string) string {
@@ -96,7 +104,7 @@ func runHTTPCall(httpClient *http.Client, req *http.Request) (string, error) {
 
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		log.Fatal(err)
+		log.Panic(err)
 	}
 
 	return string(body), nil
