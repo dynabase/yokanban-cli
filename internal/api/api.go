@@ -4,16 +4,18 @@ import (
 	"encoding/json"
 	"fmt"
 	log "github.com/sirupsen/logrus"
+	"net/http"
 	"yokanban-cli/internal/consts"
-	"yokanban-cli/internal/http"
+	yohttp "yokanban-cli/internal/http"
 )
 
+// the HTTP request methods supported by yokanban
 type requestMethod string
 
 const (
-	post  requestMethod = "post"
-	get   requestMethod = "get"
-	patch requestMethod = "patch"
+	post  requestMethod = http.MethodPost
+	get   requestMethod = http.MethodGet
+	patch requestMethod = http.MethodPatch
 )
 
 type requestOptions struct {
@@ -52,11 +54,11 @@ func runHTTPRequest(route string, jsonBody string, options requestOptions) strin
 
 	switch method := options.method; method {
 	case get:
-		body, err = http.Get(route, token)
+		body, err = yohttp.Get(route, token)
 	case post:
-		body, err = http.Post(route, token, jsonBody)
+		body, err = yohttp.Post(route, token, jsonBody)
 	case patch:
-		body, err = http.Patch(route, token, jsonBody)
+		body, err = yohttp.Patch(route, token, jsonBody)
 	default:
 		log.Fatalf("Method %s not implemented", method)
 	}
