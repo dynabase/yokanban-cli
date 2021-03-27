@@ -23,6 +23,14 @@ func GetAPIKeysPath() (string, error) {
 	return "", errors.New("env var YOKANBAN_API_KEYS_PATH not defined")
 }
 
+// GetAPIScope retrieves the scope which restricts the access to specific API functions.
+func GetAPIScope() string {
+	if value, ok := os.LookupEnv("YOKANBAN_API_SCOPE"); ok {
+		return value
+	}
+	return "board event metric share test user user.bookmark"
+}
+
 // GetLogLevel retrieves the application log level.
 // e.g. trace, debug, info, warn, error, fatal, panic
 func GetLogLevel() logrus.Level {
