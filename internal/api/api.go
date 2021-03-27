@@ -5,6 +5,7 @@ import (
 	"fmt"
 	log "github.com/sirupsen/logrus"
 	"net/http"
+	"yokanban-cli/internal/accesstoken"
 	"yokanban-cli/internal/consts"
 	yohttp "yokanban-cli/internal/http"
 )
@@ -50,15 +51,16 @@ func Test() {
 func runHTTPRequest(route string, jsonBody string, options requestOptions) string {
 	var body string
 	var err error
-	token := GetAccessToken()
+	token := accesstoken.Get()
+	h := yohttp.HTTP{Client: &http.Client{}}
 
 	switch method := options.method; method {
 	case get:
-		body, err = yohttp.Get(route, token)
+		body, err = h.Get(route, token)
 	case post:
-		body, err = yohttp.Post(route, token, jsonBody)
+		body, err = h.Post(route, token, jsonBody)
 	case patch:
-		body, err = yohttp.Patch(route, token, jsonBody)
+		body, err = h.Patch(route, token, jsonBody)
 	default:
 		log.Fatalf("Method %s not implemented", method)
 	}
@@ -69,7 +71,7 @@ func runHTTPRequest(route string, jsonBody string, options requestOptions) strin
 		}
 
 		// maybe token not valid anymore, create new one (will be cached for further requests)
-		createNewAccessToken()
+		accesstoken.Refresh()
 
 		// retry
 		retries := options.retries + 1

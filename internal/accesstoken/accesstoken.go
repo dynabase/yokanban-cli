@@ -1,25 +1,45 @@
-package api
+package accesstoken
 
 import (
 	"encoding/json"
 	log "github.com/sirupsen/logrus"
 	"io/ioutil"
+	"net/http"
 	"os"
 	"path"
 	"yokanban-cli/internal/auth"
 	"yokanban-cli/internal/consts"
-	"yokanban-cli/internal/http"
+	yohttp "yokanban-cli/internal/http"
 	"yokanban-cli/internal/utils"
 )
 
-// GetAccessToken retrieves either an access token from cache or creates a new one.
-func GetAccessToken() string {
-	log.Debug("getAccessToken")
+// Get retrieves either an access token from cache or creates a new one.
+func Get() string {
+	log.Debug("Get")
 	if cachedToken := getCachedAccessToken(); cachedToken != "" {
-		log.Debug("\t getAccessToken - return cached access token")
+		log.Debug("\t Get - return cached access token")
 		return cachedToken
 	}
-	return createNewAccessToken()
+	return Refresh()
+}
+
+// Refresh creates a new access token and overwrites cached one.
+func Refresh() string {
+	log.Debug("Refresh")
+	jwt := auth.GetServiceAccountJWT()
+	h := yohttp.HTTP{Client: &http.Client{}}
+	tokenData, err := h.Auth(jwt)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	// persist token to configuration directory for caching purposes
+	tokenDataJSON, _ := json.Marshal(tokenData)
+	if err := ioutil.WriteFile(getCachedAccessTokenFileURI(), tokenDataJSON, 0700); err != nil {
+		log.Fatal(err)
+	}
+
+	return tokenData.AccessToken
 }
 
 func getCachedAccessToken() string {
@@ -44,27 +64,13 @@ func getCachedAccessToken() string {
 		log.Fatal(err)
 	}
 
-	var accessTokenData http.TokenData
+	var accessTokenData yohttp.TokenData
 
 	if err := json.Unmarshal(byteValue, &accessTokenData); err != nil {
 		log.Fatal(err)
 	}
 
 	return accessTokenData.AccessToken
-}
-
-func createNewAccessToken() string {
-	log.Debug("createNewAccessToken")
-	jwt := auth.GetServiceAccountJWT()
-	tokenData := http.Auth(jwt)
-
-	// persist token to configuration directory for caching purposes
-	tokenDataJSON, _ := json.Marshal(tokenData)
-	if err := ioutil.WriteFile(getCachedAccessTokenFileURI(), tokenDataJSON, 0700); err != nil {
-		log.Fatal(err)
-	}
-
-	return tokenData.AccessToken
 }
 
 func getCachedAccessTokenFileURI() string {
