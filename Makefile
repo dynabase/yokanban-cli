@@ -18,6 +18,10 @@ test:
 test-dev:
 	go test ./... -failfast -cover
 
+test-html:
+	go test ./... -coverprofile coverage.out
+	go tool cover -html coverage.out
+
 build-release: clean
 	env CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -a -ldflags '-extldflags "-static"' -o build/yokanban_linux
 
