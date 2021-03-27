@@ -18,14 +18,15 @@ package main
 // TODO change once repo is available
 //import "github.com/dynabase/yokanban-cli/cmd"
 import (
-	"github.com/joho/godotenv"
-	log "github.com/sirupsen/logrus"
 	"yokanban-cli/cmd"
 	"yokanban-cli/internal/config"
+
+	"github.com/joho/godotenv"
+	log "github.com/sirupsen/logrus"
 )
 
 func main() {
-	godotenv.Load() // read optional .env file
+	_ = godotenv.Load() // read optional .env file
 	log.SetLevel(config.GetLogLevel())
 	cmd.Execute()
 }

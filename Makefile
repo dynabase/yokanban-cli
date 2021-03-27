@@ -11,6 +11,10 @@ clean:
 run:
 	go run main.go
 
+.PHONY: fmt
+fmt:
+	go fmt ./...
+
 .PHONY: lint
 lint:
 	golangci-lint run

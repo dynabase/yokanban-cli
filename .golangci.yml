@@ -9,6 +9,6 @@ issues:
 # run `golangci-lint help linters` to find out more about each available linter.
 linters:
   enable:
+    - bodyclose
     - whitespace
-  disable:
-    - errcheck
+  # disable:
