@@ -16,7 +16,7 @@ limitations under the License.
 package main
 
 // TODO change once repo is available
-//import "github.com/dynabase/yokanban-cli/cmd"
+// import "github.com/dynabase/yokanban-cli/cmd"
 import (
 	"yokanban-cli/cmd"
 	"yokanban-cli/internal/config"

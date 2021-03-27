@@ -4,6 +4,8 @@ run:
 issues:
   max-issues-per-linter: 0
   max-same-issues: 0
+  include:
+    - EXC0002
 
 # default linters are run anyways.
 # run `golangci-lint help linters` to find out more about each available linter.
@@ -14,6 +16,10 @@ linters:
     - exportloopref
     - goconst
     - goimports
+    - golint
+    - gofmt
+    # TODO: enable after fixing lint errors
+    #- gocritic
     - goprintffuncname
     - misspell
     - prealloc
@@ -22,4 +28,7 @@ linters:
     - unconvert
     - unparam
     - whitespace
-  # disable:
+linters-settings:
+  golint:
+    # minimal confidence for issues, default is 0.8
+    min-confidence: 0.8

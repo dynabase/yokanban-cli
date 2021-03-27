@@ -16,7 +16,7 @@ func GetAPIURL() string {
 	return "https://api.yokanban.io"
 }
 
-//GetAPIKeysPath retrieves the path to the API keys of a service account.
+// GetAPIKeysPath retrieves the path to the API keys of a service account.
 func GetAPIKeysPath() (string, error) {
 	if value, ok := os.LookupEnv("YOKANBAN_API_KEYS_PATH"); ok {
 		return value, nil
