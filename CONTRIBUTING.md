@@ -9,7 +9,12 @@
 ```
 go get -u github.com/spf13/cobra/cobra
 ```
+- [golangci-lint](https://golangci-lint.run/usage/install/)
 
+We are using `golangci-lint` as linter framework that aggregates several linters at once.
+Please consider [integrating](https://golangci-lint.run/usage/integrations/) it as a linter in your editor of choice. 
+
+```
 ## Development
 
 Check the guidelines for
