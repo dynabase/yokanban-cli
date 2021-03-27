@@ -3,11 +3,12 @@ package api
 import (
 	"encoding/json"
 	"fmt"
-	log "github.com/sirupsen/logrus"
 	"net/http"
 	"yokanban-cli/internal/accesstoken"
 	"yokanban-cli/internal/consts"
 	yohttp "yokanban-cli/internal/http"
+
+	log "github.com/sirupsen/logrus"
 )
 
 // the HTTP request methods supported by yokanban

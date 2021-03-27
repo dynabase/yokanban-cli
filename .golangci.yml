@@ -10,5 +10,16 @@ issues:
 linters:
   enable:
     - bodyclose
+    - dupl
+    - exportloopref
+    - goconst
+    - goimports
+    - goprintffuncname
+    - misspell
+    - prealloc
+    - rowserrcheck
+    - sqlclosecheck
+    - unconvert
+    - unparam
     - whitespace
   # disable:

@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
-	log "github.com/sirupsen/logrus"
 	"io/ioutil"
 	"net/http"
 	"net/url"
@@ -12,6 +11,8 @@ import (
 	"strings"
 	"yokanban-cli/internal/config"
 	"yokanban-cli/internal/consts"
+
+	log "github.com/sirupsen/logrus"
 )
 
 // HTTP the basic struct.
