@@ -119,7 +119,7 @@ func TestHTTPPostSuccess(t *testing.T) {
 		buf.ReadFrom(req.Body)
 		body := buf.String()
 
-		assert.Equal(t, "{\"foo\": 123}", body)
+		assert.Equal(t, `{"foo": 123}`, body)
 
 		return &http.Response{
 			StatusCode: 200,
@@ -131,7 +131,7 @@ func TestHTTPPostSuccess(t *testing.T) {
 	})
 
 	h := yohttp.HTTP{Client: client}
-	body, err := h.Post("/foo/bar", "abc123", "{\"foo\": 123}")
+	body, err := h.Post("/foo/bar", "abc123", `{"foo": 123}`)
 
 	assert.Nil(t, err)
 	assert.Equal(t, "OK", body)
@@ -153,7 +153,7 @@ func TestHTTPPatchSuccess(t *testing.T) {
 		buf.ReadFrom(req.Body)
 		body := buf.String()
 
-		assert.Equal(t, "{\"foo\": 123}", body)
+		assert.Equal(t, `{"foo": 123}`, body)
 
 		return &http.Response{
 			StatusCode: 200,
@@ -165,7 +165,7 @@ func TestHTTPPatchSuccess(t *testing.T) {
 	})
 
 	h := yohttp.HTTP{Client: client}
-	body, err := h.Patch("/foo/bar", "abc123", "{\"foo\": 123}")
+	body, err := h.Patch("/foo/bar", "abc123", `{"foo": 123}`)
 
 	assert.Nil(t, err)
 	assert.Equal(t, "OK", body)
