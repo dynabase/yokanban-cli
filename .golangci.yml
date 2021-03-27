@@ -1,0 +1,14 @@
+run:
+  tests: false
+
+issues:
+  max-issues-per-linter: 0
+  max-same-issues: 0
+
+# default linters are run anyways.
+# run `golangci-lint help linters` to find out more about each available linter.
+linters:
+  enable:
+    - whitespace
+  disable:
+    - errcheck
