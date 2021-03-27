@@ -28,7 +28,10 @@ func Refresh() string {
 	log.Debug("Refresh")
 	jwt := auth.GetServiceAccountJWT()
 	h := yohttp.HTTP{Client: &http.Client{}}
-	tokenData := h.Auth(jwt)
+	tokenData, err := h.Auth(jwt)
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	// persist token to configuration directory for caching purposes
 	tokenDataJSON, _ := json.Marshal(tokenData)

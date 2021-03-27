@@ -20,7 +20,7 @@ type HTTP struct {
 }
 
 // Auth runs an authentication call to retrieve an access token for further api communication.
-func (h *HTTP) Auth(jwt string) TokenData {
+func (h *HTTP) Auth(jwt string) (TokenData, error) {
 	apiURL := getAPIURL(consts.RouteOauthToken)
 	data := url.Values{
 		"grant_type": {"urn:ietf:params:oauth:grant-type:jwt-bearer"},
@@ -32,16 +32,16 @@ func (h *HTTP) Auth(jwt string) TokenData {
 
 	body, err := runHTTPCall(h.Client, req)
 	if err != nil {
-		log.Fatal(err)
+		return TokenData{}, err
 	}
 
 	var res TokenResponse
 
 	if err := json.NewDecoder(strings.NewReader(body)).Decode(&res); err != nil {
-		log.Fatal(err)
+		return TokenData{}, err
 	}
 
-	return res.Data
+	return res.Data, nil
 }
 
 // Get runs a HTTP GET request to an API urlPath. Authentication is done via Bearer token.
