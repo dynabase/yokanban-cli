@@ -5,6 +5,7 @@ import (
 	"fmt"
 	log "github.com/sirupsen/logrus"
 	"net/http"
+	"path"
 	"yokanban-cli/internal/accesstoken"
 	"yokanban-cli/internal/consts"
 	yohttp "yokanban-cli/internal/http"
@@ -14,9 +15,10 @@ import (
 type requestMethod string
 
 const (
-	post  requestMethod = http.MethodPost
-	get   requestMethod = http.MethodGet
-	patch requestMethod = http.MethodPatch
+	delete requestMethod = http.MethodDelete
+	get    requestMethod = http.MethodGet
+	patch  requestMethod = http.MethodPatch
+	post   requestMethod = http.MethodPost
 )
 
 type requestOptions struct {
@@ -30,6 +32,12 @@ type CreateBoardModel struct {
 	Name string `json:"name,omitempty"`
 }
 
+// DeleteBoardModel describes all attributes of a board to be deleted.
+// a json representation is not needed since the id is not part of a HTTP request body.
+type DeleteBoardModel struct {
+	ID string
+}
+
 // CreateBoard runs an API call to create a yokanban board.
 func CreateBoard(model CreateBoardModel) {
 	log.Debugf("CreateBoard()")
@@ -38,6 +46,13 @@ func CreateBoard(model CreateBoardModel) {
 		log.Fatal(err)
 	}
 	body := runHTTPRequest(consts.RouteBoard, string(payload), requestOptions{retries: 0, maxRetries: 2, method: post})
+	fmt.Println(body)
+}
+
+// DeleteBoard runs an API call to delete a yokanban board.
+func DeleteBoard(model DeleteBoardModel) {
+	log.Debugf("DeleteBoard()")
+	body := runHTTPRequest(path.Join(consts.RouteBoard, model.ID), "", requestOptions{retries: 0, maxRetries: 2, method: delete})
 	fmt.Println(body)
 }
 
@@ -55,12 +70,14 @@ func runHTTPRequest(route string, jsonBody string, options requestOptions) strin
 	h := yohttp.HTTP{Client: &http.Client{}}
 
 	switch method := options.method; method {
+	case delete:
+		body, err = h.Delete(route, token)
 	case get:
 		body, err = h.Get(route, token)
-	case post:
-		body, err = h.Post(route, token, jsonBody)
 	case patch:
 		body, err = h.Patch(route, token, jsonBody)
+	case post:
+		body, err = h.Post(route, token, jsonBody)
 	default:
 		log.Fatalf("Method %s not implemented", method)
 	}
