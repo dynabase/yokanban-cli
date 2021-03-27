@@ -15,11 +15,7 @@ var createCmd = &cobra.Command{
 	Example:   "yokanban create board --name test-board",
 	ValidArgs: []string{string(elements.Board)},
 	Args:      cobra.ExactValidArgs(1),
-	Run: func(cmd *cobra.Command, args []string) {
-		//if args[0] == string(elements.Board) {
-		//	api.CreateBoard(api.CreateBoardModel{Name: name})
-		//}
-	},
+	Run:       func(cmd *cobra.Command, args []string) {},
 }
 
 // createBoardSubCmd has the responsibility to create a yokanban board
