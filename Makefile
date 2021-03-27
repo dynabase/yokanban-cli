@@ -30,4 +30,4 @@ install:
 	@mv yokanban ${GOPATH}/bin/
 	@echo "Run 'yokanban help' for further instructions..."
 
-.PHONY: all clean run lint test test-dev build-release install
+.PHONY: all clean run lint test test-dev test-html build-release install
