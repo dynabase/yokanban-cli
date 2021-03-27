@@ -99,6 +99,11 @@ yokanban cli commands are structured in following way `yokanban <command> <arg> 
 
     yokanban test
 
-### Create board
+### Board
+#### Create board
 
-    yokanban create board
+    yokanban create board --name test-board
+
+#### Delete board
+
+    yokanban delete board --id 605f574e26f0535cfd7fd6cd
