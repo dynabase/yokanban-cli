@@ -33,10 +33,9 @@ type CreateBoardModel struct {
 	Name string `json:"name,omitempty"`
 }
 
-// DeleteBoardModel describes all attributes of a board to be deleted.
-// a json representation is not needed since the id is not part of a HTTP request body.
-type DeleteBoardModel struct {
-	ID string
+// UpdateBoardModel describes all attributes of a board to be updated.
+type UpdateBoardModel struct {
+	NewName string `json:"newName,omitempty"`
 }
 
 // CreateBoard runs an API call to create a yokanban board.
@@ -51,9 +50,21 @@ func CreateBoard(model CreateBoardModel) {
 }
 
 // DeleteBoard runs an API call to delete a yokanban board.
-func DeleteBoard(model DeleteBoardModel) {
+func DeleteBoard(id string) {
 	log.Debugf("DeleteBoard()")
-	body := runHTTPRequest(path.Join(consts.RouteBoard, model.ID), "", requestOptions{retries: 0, maxRetries: 2, method: delete})
+	body := runHTTPRequest(path.Join(consts.RouteBoard, id), "", requestOptions{retries: 0, maxRetries: 2, method: delete})
+	fmt.Println(body)
+}
+
+// UpdateBoard runs an API call to update a yokanban board.
+func UpdateBoard(id string, model UpdateBoardModel) {
+	log.Debugf("UpdateBoard()")
+	payload, err := json.Marshal(model)
+	if err != nil {
+		log.Fatal(err)
+	}
+	// update the board name. Once more update possibilities have to be implemented, distinguish here.
+	body := runHTTPRequest(path.Join(consts.RouteBoard, id, "name"), string(payload), requestOptions{retries: 0, maxRetries: 2, method: patch})
 	fmt.Println(body)
 }
 
