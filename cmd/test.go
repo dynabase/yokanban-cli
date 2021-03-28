@@ -1,8 +1,9 @@
 package cmd
 
 import (
-	"github.com/spf13/cobra"
 	"yokanban-cli/internal/api"
+
+	"github.com/spf13/cobra"
 )
 
 // testCmd represents the test command

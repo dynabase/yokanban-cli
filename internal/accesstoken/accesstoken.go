@@ -2,7 +2,6 @@ package accesstoken
 
 import (
 	"encoding/json"
-	log "github.com/sirupsen/logrus"
 	"io/ioutil"
 	"net/http"
 	"os"
@@ -11,6 +10,8 @@ import (
 	"yokanban-cli/internal/consts"
 	yohttp "yokanban-cli/internal/http"
 	"yokanban-cli/internal/utils"
+
+	log "github.com/sirupsen/logrus"
 )
 
 // Get retrieves either an access token from cache or creates a new one.
@@ -48,7 +49,7 @@ func getCachedAccessToken() string {
 	if err != nil {
 		log.Fatal(err)
 	}
-	if exists == false {
+	if !exists {
 		log.Debug("\t getCachedAccessToken - cached access token does not exist")
 		return ""
 	}

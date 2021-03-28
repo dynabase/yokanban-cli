@@ -1,0 +1,34 @@
+run:
+  tests: false
+
+issues:
+  max-issues-per-linter: 0
+  max-same-issues: 0
+  include:
+    - EXC0002
+
+# default linters are run anyways.
+# run `golangci-lint help linters` to find out more about each available linter.
+linters:
+  enable:
+    - bodyclose
+    - dupl
+    - exportloopref
+    - goconst
+    - goimports
+    - golint
+    - gofmt
+    # TODO: enable after fixing lint errors
+    #- gocritic
+    - goprintffuncname
+    - misspell
+    - prealloc
+    - rowserrcheck
+    - sqlclosecheck
+    - unconvert
+    - unparam
+    - whitespace
+linters-settings:
+  golint:
+    # minimal confidence for issues, default is 0.8
+    min-confidence: 0.8

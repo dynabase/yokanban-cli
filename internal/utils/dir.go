@@ -1,10 +1,11 @@
 package utils
 
 import (
-	"github.com/mitchellh/go-homedir"
-	log "github.com/sirupsen/logrus"
 	"os"
 	"path"
+
+	"github.com/mitchellh/go-homedir"
+	log "github.com/sirupsen/logrus"
 )
 
 // GetUserHomeDir retrieves the OS specific home directory of the current user.
@@ -40,7 +41,7 @@ func GetConfigDir() string {
 	if err != nil {
 		log.Fatal(err)
 	}
-	if exists == false {
+	if !exists {
 		if err := os.MkdirAll(configDir, 0700); err != nil {
 			log.Fatal(err)
 		}
