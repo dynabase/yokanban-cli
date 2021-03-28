@@ -4,6 +4,8 @@ import (
 	"yokanban-cli/internal/api"
 	"yokanban-cli/internal/elements"
 
+	logger "github.com/sirupsen/logrus"
+
 	"github.com/spf13/cobra"
 )
 
@@ -43,7 +45,9 @@ func init() {
 	// deleteCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 
 	deleteCmd.PersistentFlags().StringVarP(&deleteID, "id", "i", "", "The id of the resource")
-	deleteCmd.MarkPersistentFlagRequired("id")
+	if err := deleteCmd.MarkPersistentFlagRequired("id"); err != nil {
+		logger.Error(err)
+	}
 
 	// subCommands
 	deleteCmd.AddCommand(deleteBoardSubCmd)
