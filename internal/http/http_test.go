@@ -76,6 +76,33 @@ func TestHTTPAuthFail(t *testing.T) {
 	assert.NotNil(t, err)
 }
 
+func TestHTTPDeleteSuccess(t *testing.T) {
+	client := NewTestClient(func(req *http.Request) *http.Response {
+		// Test request parameters
+		assert.Equal(t, "https://api.yokanban.io/foo/bar", req.URL.String())
+
+		// Test request headers
+		assert.Equal(t, "Bearer abc123", req.Header.Get("Authorization"))
+
+		// Test request method
+		assert.Equal(t, http.MethodDelete, req.Method)
+
+		return &http.Response{
+			StatusCode: 200,
+			// Send response to be tested
+			Body: ioutil.NopCloser(bytes.NewBufferString(`OK`)),
+			// Must be set to non-nil value or it panics
+			Header: make(http.Header),
+		}
+	})
+
+	h := yohttp.HTTP{Client: client}
+	body, err := h.Delete("/foo/bar", "abc123")
+
+	assert.Nil(t, err)
+	assert.Equal(t, "OK", body)
+}
+
 func TestHTTPGetSuccess(t *testing.T) {
 	client := NewTestClient(func(req *http.Request) *http.Response {
 		// Test request parameters
@@ -98,40 +125,6 @@ func TestHTTPGetSuccess(t *testing.T) {
 
 	h := yohttp.HTTP{Client: client}
 	body, err := h.Get("/foo/bar", "abc123")
-
-	assert.Nil(t, err)
-	assert.Equal(t, "OK", body)
-}
-
-func TestHTTPPostSuccess(t *testing.T) {
-	client := NewTestClient(func(req *http.Request) *http.Response {
-		// Test request parameters
-		assert.Equal(t, "https://api.yokanban.io/foo/bar", req.URL.String())
-
-		// Test request headers
-		assert.Equal(t, "Bearer abc123", req.Header.Get("Authorization"))
-
-		// Test request method
-		assert.Equal(t, http.MethodPost, req.Method)
-
-		// Test request body
-		buf := new(bytes.Buffer)
-		buf.ReadFrom(req.Body)
-		body := buf.String()
-
-		assert.Equal(t, `{"foo": 123}`, body)
-
-		return &http.Response{
-			StatusCode: 200,
-			// Send response to be tested
-			Body: ioutil.NopCloser(bytes.NewBufferString(`OK`)),
-			// Must be set to non-nil value or it panics
-			Header: make(http.Header),
-		}
-	})
-
-	h := yohttp.HTTP{Client: client}
-	body, err := h.Post("/foo/bar", "abc123", `{"foo": 123}`)
 
 	assert.Nil(t, err)
 	assert.Equal(t, "OK", body)
@@ -166,6 +159,40 @@ func TestHTTPPatchSuccess(t *testing.T) {
 
 	h := yohttp.HTTP{Client: client}
 	body, err := h.Patch("/foo/bar", "abc123", `{"foo": 123}`)
+
+	assert.Nil(t, err)
+	assert.Equal(t, "OK", body)
+}
+
+func TestHTTPPostSuccess(t *testing.T) {
+	client := NewTestClient(func(req *http.Request) *http.Response {
+		// Test request parameters
+		assert.Equal(t, "https://api.yokanban.io/foo/bar", req.URL.String())
+
+		// Test request headers
+		assert.Equal(t, "Bearer abc123", req.Header.Get("Authorization"))
+
+		// Test request method
+		assert.Equal(t, http.MethodPost, req.Method)
+
+		// Test request body
+		buf := new(bytes.Buffer)
+		buf.ReadFrom(req.Body)
+		body := buf.String()
+
+		assert.Equal(t, `{"foo": 123}`, body)
+
+		return &http.Response{
+			StatusCode: 200,
+			// Send response to be tested
+			Body: ioutil.NopCloser(bytes.NewBufferString(`OK`)),
+			// Must be set to non-nil value or it panics
+			Header: make(http.Header),
+		}
+	})
+
+	h := yohttp.HTTP{Client: client}
+	body, err := h.Post("/foo/bar", "abc123", `{"foo": 123}`)
 
 	assert.Nil(t, err)
 	assert.Equal(t, "OK", body)

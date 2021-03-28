@@ -6,7 +6,7 @@ import (
 	"yokanban-cli/internal/elements"
 )
 
-var name string
+var createName string
 
 // createCmd represents the root create command
 var createCmd = &cobra.Command{
@@ -15,11 +15,7 @@ var createCmd = &cobra.Command{
 	Example:   "yokanban create board --name test-board",
 	ValidArgs: []string{string(elements.Board)},
 	Args:      cobra.ExactValidArgs(1),
-	Run: func(cmd *cobra.Command, args []string) {
-		//if args[0] == string(elements.Board) {
-		//	api.CreateBoard(api.CreateBoardModel{Name: name})
-		//}
-	},
+	Run:       func(cmd *cobra.Command, args []string) {},
 }
 
 // createBoardSubCmd has the responsibility to create a yokanban board
@@ -28,7 +24,7 @@ var createBoardSubCmd = &cobra.Command{
 	Short:   "Create a yokanban board",
 	Example: "yokanban create board --name test-board",
 	Run: func(cmd *cobra.Command, args []string) {
-		api.CreateBoard(api.CreateBoardModel{Name: name})
+		api.CreateBoard(api.CreateBoardModel{Name: createName})
 	},
 }
 
@@ -45,7 +41,7 @@ func init() {
 	// is called directly, e.g.:
 	// createCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 
-	createCmd.PersistentFlags().StringVarP(&name, "name", "n", "", "The name of the resource")
+	createCmd.PersistentFlags().StringVarP(&createName, "name", "n", "", "The name of the resource")
 
 	// subCommands
 	createCmd.AddCommand(createBoardSubCmd)

@@ -44,25 +44,22 @@ func (h *HTTP) Auth(jwt string) (TokenData, error) {
 	return res.Data, nil
 }
 
+// Delete runs a HTTP DELETE request to an API urlPath. Authentication is done via Bearer token.
+func (h *HTTP) Delete(urlPath string, token string) (string, error) {
+	apiURL := getAPIURL(urlPath)
+
+	req, _ := http.NewRequest(http.MethodDelete, apiURL, nil)
+	req.Header.Set("Authorization", "Bearer "+token)
+
+	return runHTTPCall(h.Client, req)
+}
+
 // Get runs a HTTP GET request to an API urlPath. Authentication is done via Bearer token.
 func (h *HTTP) Get(urlPath string, token string) (string, error) {
 	apiURL := getAPIURL(urlPath)
 
 	req, _ := http.NewRequest(http.MethodGet, apiURL, nil)
 	req.Header.Set("Authorization", "Bearer "+token)
-
-	return runHTTPCall(h.Client, req)
-}
-
-// Post runs a HTTP POST request to an API urlPath. Authentication is done via Bearer token.
-func (h *HTTP) Post(urlPath string, token string, jsonBody string) (string, error) {
-	apiURL := getAPIURL(urlPath)
-
-	var jsonStr = []byte(jsonBody)
-
-	req, _ := http.NewRequest(http.MethodPost, apiURL, bytes.NewBuffer(jsonStr))
-	req.Header.Set("Authorization", "Bearer "+token)
-	req.Header.Set("Content-Type", "application/json")
 
 	return runHTTPCall(h.Client, req)
 }
@@ -74,6 +71,19 @@ func (h *HTTP) Patch(urlPath string, token string, jsonBody string) (string, err
 	var jsonStr = []byte(jsonBody)
 
 	req, _ := http.NewRequest(http.MethodPatch, apiURL, bytes.NewBuffer(jsonStr))
+	req.Header.Set("Authorization", "Bearer "+token)
+	req.Header.Set("Content-Type", "application/json")
+
+	return runHTTPCall(h.Client, req)
+}
+
+// Post runs a HTTP POST request to an API urlPath. Authentication is done via Bearer token.
+func (h *HTTP) Post(urlPath string, token string, jsonBody string) (string, error) {
+	apiURL := getAPIURL(urlPath)
+
+	var jsonStr = []byte(jsonBody)
+
+	req, _ := http.NewRequest(http.MethodPost, apiURL, bytes.NewBuffer(jsonStr))
 	req.Header.Set("Authorization", "Bearer "+token)
 	req.Header.Set("Content-Type", "application/json")
 
