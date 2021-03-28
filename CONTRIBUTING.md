@@ -5,16 +5,15 @@
 - [Go](https://golang.org/doc/install)
 - [Cobra library](https://github.com/spf13/cobra#readme)
 - [Cobra generator](https://github.com/spf13/cobra/blob/master/cobra/README.md)
-
-```
-go get -u github.com/spf13/cobra/cobra
-```
 - [golangci-lint](https://golangci-lint.run/usage/install/)
 
-We are using `golangci-lint` as linter framework that aggregates several linters at once.
-Please consider [integrating](https://golangci-lint.run/usage/integrations/) it as a linter in your editor of choice. 
 
-```
+To set up all prerequisites ensure that you have a derivative of [make](https://www.gnu.org/software/make/) installed on your system and run
+
+    make deps-dev
+
+This will take care to install all dependencies needed for development.
+
 ## Development
 
 Check the guidelines for
@@ -24,7 +23,7 @@ Check the guidelines for
 
 ### Install modules
 
-    go mod download
+    make deps
 
 ### Run your application
 
@@ -39,6 +38,9 @@ See: https://github.com/spf13/cobra/blob/master/cobra/README.md#cobra-add
 
 ### Linting
 
-Ensure your changes follow linting rules
+We are using `golangci-lint` as linter framework that aggregates several linters at once.
+Please consider [integrating](https://golangci-lint.run/usage/integrations/) it as a linter in your editor of choice.
+
+Before creating a PR, please ensure your changes follow our linting rules
 
     make lint
