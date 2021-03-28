@@ -25,7 +25,7 @@ var createBoardSubCmd = &cobra.Command{
 	Short:   "Create a yokanban board",
 	Example: "yokanban create board --name test-board",
 	Run: func(cmd *cobra.Command, args []string) {
-		api.CreateBoard(api.CreateBoardModel{Name: createName})
+		api.CreateBoard(api.CreateBoardDTO{Name: createName})
 	},
 }
 

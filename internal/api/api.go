@@ -8,6 +8,7 @@ import (
 	"yokanban-cli/internal/accesstoken"
 	"yokanban-cli/internal/consts"
 	yohttp "yokanban-cli/internal/http"
+	"yokanban-cli/internal/models"
 
 	log "github.com/sirupsen/logrus"
 )
@@ -28,18 +29,28 @@ type requestOptions struct {
 	maxRetries int
 }
 
-// CreateBoardModel describes all attributes of a board to be created.
-type CreateBoardModel struct {
+// CreateBoardDTO represents the exchange format to create a single yokanban board.
+type CreateBoardDTO struct {
 	Name string `json:"name,omitempty"`
 }
 
-// UpdateBoardModel describes all attributes of a board to be updated.
-type UpdateBoardModel struct {
+// UpdateBoardDTO represents the exchange format to update a single yokanban board.
+type UpdateBoardDTO struct {
 	NewName string `json:"newName,omitempty"`
 }
 
+// UserResponseDTO represents the exchange format of a user API response.
+type UserResponseDTO struct {
+	Success bool `json:"success"`
+	Data    struct {
+		*models.UserDTO
+		Boards       []models.BoardDTO `json:"boards"`
+		IsSocialUser bool              `json:"isSocialUser"`
+	} `json:"data"`
+}
+
 // CreateBoard runs an API call to create a yokanban board.
-func CreateBoard(model CreateBoardModel) {
+func CreateBoard(model CreateBoardDTO) {
 	log.Debugf("CreateBoard()")
 	payload, err := json.Marshal(model)
 	if err != nil {
@@ -57,7 +68,7 @@ func DeleteBoard(id string) {
 }
 
 // UpdateBoard runs an API call to update a yokanban board.
-func UpdateBoard(id string, model UpdateBoardModel) {
+func UpdateBoard(id string, model UpdateBoardDTO) {
 	log.Debugf("UpdateBoard()")
 	payload, err := json.Marshal(model)
 	if err != nil {
@@ -66,6 +77,28 @@ func UpdateBoard(id string, model UpdateBoardModel) {
 	// update the board name. Once more update possibilities have to be implemented, distinguish here.
 	body := runHTTPRequest(path.Join(consts.RouteBoard, id, "name"), string(payload), requestOptions{retries: 0, maxRetries: 2, method: patch})
 	fmt.Println(body)
+}
+
+// ListBoards runs an API call to retrieve a list of yokanban boards the current user has access to.
+func ListBoards() {
+	log.Debugf("ListBoards()")
+	// for the list of boards the user has to be retrieved. Be aware that "user" scope is needed therefore!
+	body := runHTTPRequest(consts.RouteUser, "", requestOptions{retries: 0, maxRetries: 2, method: get})
+
+	// extract the boards
+	var res UserResponseDTO
+
+	if err := json.Unmarshal([]byte(body), &res); err != nil {
+		log.Fatal(err)
+	}
+
+	// generate the pretty printed output
+	boards, err := json.MarshalIndent(res.Data.Boards, "", "  ")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	fmt.Println(string(boards))
 }
 
 // Test runs an API call to test current credentials

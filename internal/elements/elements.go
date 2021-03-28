@@ -5,6 +5,7 @@ type YoElement string
 
 // the YoElement enums
 const (
-	Board YoElement = "board"
-	Card  YoElement = "card"
+	Board  YoElement = "board"
+	Boards YoElement = "boards"
+	Card   YoElement = "card"
 )
