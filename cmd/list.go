@@ -1,18 +1,30 @@
 package cmd
 
 import (
-	"fmt"
+	"yokanban-cli/internal/api"
+	"yokanban-cli/internal/elements"
 
 	"github.com/spf13/cobra"
 )
 
 // listCmd represents the list command
 var listCmd = &cobra.Command{
-	Use:   "list",
-	Short: "List yokanban resources like boards, cards, etc.",
-	Long:  `List yokanban resources like boards, cards, etc.`,
+	Use:       "list",
+	Short:     "Lists yokanban resources like boards, cards, etc.",
+	Example:   "yokanban list boards",
+	ValidArgs: []string{string(elements.Boards), string(elements.Board)},
+	Args:      cobra.ExactValidArgs(1),
+	Run:       func(cmd *cobra.Command, args []string) {},
+}
+
+// listBoardsSubCmd has the responsibility to list yokanban boards of a user
+var listBoardsSubCmd = &cobra.Command{
+	Use:     "boards",
+	Aliases: []string{"board"},
+	Short:   "Lists yokanban boards current user has access to",
+	Example: "yokanban list boards",
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("list called")
+		api.ListBoards()
 	},
 }
 
@@ -28,4 +40,7 @@ func init() {
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
 	// listCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+
+	// subCommands
+	listCmd.AddCommand(listBoardsSubCmd)
 }
