@@ -1,5 +1,17 @@
-.PHONY: default
-default: clean build-release
+.PHONY: all
+all: clean deps build-release
+
+.PHONY: deps
+deps:
+	go mod tidy
+	go mod download
+
+.PHONY: deps-dev
+deps-dev:
+	go install github.com/spf13/cobra/cobra@latest
+	go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
+	go mod tidy
+	go mod download
 
 .PHONY: clean
 clean:
