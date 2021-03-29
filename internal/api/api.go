@@ -86,18 +86,25 @@ func ListBoards() {
 
 	// extract the boards
 	var res UserResponseDTO
-
 	if err := json.Unmarshal([]byte(body), &res); err != nil {
 		log.Fatal(err)
 	}
 
+	// create a boardList out of the response
+	var boardList BoardListDTO
+	for _, b := range res.Data.Boards {
+		board := &BoardShortDTO{}
+		board.Map(&b)
+		boardList = append(boardList, board)
+	}
+
 	// generate the pretty printed output
-	boards, err := json.MarshalIndent(res.Data.Boards, "", "  ")
+	boardsPretty, err := json.MarshalIndent(boardList, "", "  ")
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	fmt.Println(string(boards))
+	fmt.Println(string(boardsPretty))
 }
 
 // Test runs an API call to test current credentials
