@@ -1,4 +1,4 @@
-package models
+package api
 
 // UserDTO represents the exchange format of a single yokanban user.
 type UserDTO struct {

@@ -8,7 +8,6 @@ import (
 	"yokanban-cli/internal/accesstoken"
 	"yokanban-cli/internal/consts"
 	yohttp "yokanban-cli/internal/http"
-	"yokanban-cli/internal/models"
 
 	log "github.com/sirupsen/logrus"
 )
@@ -43,9 +42,9 @@ type UpdateBoardDTO struct {
 type UserResponseDTO struct {
 	Success bool `json:"success"`
 	Data    struct {
-		*models.UserDTO
-		Boards       []models.BoardDTO `json:"boards"`
-		IsSocialUser bool              `json:"isSocialUser"`
+		*UserDTO
+		Boards       []BoardDTO `json:"boards"`
+		IsSocialUser bool       `json:"isSocialUser"`
 	} `json:"data"`
 }
 

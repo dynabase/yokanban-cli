@@ -1,4 +1,4 @@
-package models
+package api
 
 // BoardDTO represents the exchange format of a single yokanban board.
 type BoardDTO struct {

@@ -1,4 +1,4 @@
-package models
+package api
 
 // AvatarDTO represents the exchange format of a single yokanban avatar.
 type AvatarDTO struct {

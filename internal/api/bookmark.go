@@ -1,4 +1,4 @@
-package models
+package api
 
 // BookmarkDTO represents the exchange format of a single yokanban bookmark.
 type BookmarkDTO struct {
