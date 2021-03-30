@@ -91,9 +91,9 @@ func ListBoards() {
 	}
 
 	// create a boardList out of the response
-	var boardList BoardListDTO
+	var boardList BoardList
 	for _, b := range res.Data.Boards {
-		board := &BoardShortDTO{}
+		board := &BoardShort{}
 		board.Map(&b)
 		boardList = append(boardList, board)
 	}

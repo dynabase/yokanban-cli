@@ -10,18 +10,18 @@ type BoardDTO struct {
 	Avatars   []AvatarDTO `json:"avatars"`
 }
 
-// BoardShortDTO represents the exchange format of a single yokanban board containing only the data for an overview.
-type BoardShortDTO struct {
+// BoardShort represents the short version of a single yokanban board containing only the minimal dataset for an overview.
+type BoardShort struct {
 	ID        string `json:"_id"`
 	Name      string `json:"name"`
 	CreatedAt string `json:"createdAt"`
 }
 
-// BoardListDTO represents a list of yokanban boards.
-type BoardListDTO []*BoardShortDTO
+// BoardList represents a list of yokanban boards.
+type BoardList []*BoardShort
 
-// Map maps a BoardDTO to a BoardShortDTO.
-func (b *BoardShortDTO) Map(board *BoardDTO) {
+// Map maps a BoardDTO to a BoardShort.
+func (b *BoardShort) Map(board *BoardDTO) {
 	b.ID = board.ID
 	b.Name = board.Name
 	b.CreatedAt = board.CreatedAt
