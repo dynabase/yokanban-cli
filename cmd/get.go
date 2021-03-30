@@ -1,9 +1,10 @@
 package cmd
 
 import (
-	logger "github.com/sirupsen/logrus"
 	"yokanban-cli/internal/api"
 	"yokanban-cli/internal/elements"
+
+	logger "github.com/sirupsen/logrus"
 
 	"github.com/spf13/cobra"
 )
