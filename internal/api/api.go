@@ -66,6 +66,13 @@ func DeleteBoard(id string) {
 	fmt.Println(body)
 }
 
+// GetBoard runs an API call to retrieve detail information of a yokanban board.
+func GetBoard(id string) {
+	log.Debugf("GetBoard()")
+	body := runHTTPRequest(path.Join(consts.RouteBoard, id), "", requestOptions{retries: 0, maxRetries: 2, method: get})
+	fmt.Println(body)
+}
+
 // UpdateBoard runs an API call to update a yokanban board.
 func UpdateBoard(id string, model UpdateBoardDTO) {
 	log.Debugf("UpdateBoard()")
