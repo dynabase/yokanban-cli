@@ -4,7 +4,7 @@ import (
 	"yokanban-cli/internal/api"
 	"yokanban-cli/internal/elements"
 
-	logger "github.com/sirupsen/logrus"
+	log "github.com/sirupsen/logrus"
 
 	"github.com/spf13/cobra"
 )
@@ -46,7 +46,7 @@ func init() {
 
 	getCmd.PersistentFlags().StringVarP(&getID, "id", "i", "", "The id of the resource")
 	if err := getCmd.MarkPersistentFlagRequired("id"); err != nil {
-		logger.Error(err)
+		log.Error(err)
 	}
 
 	// subCommands
