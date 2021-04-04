@@ -7,5 +7,5 @@ type YoElement string
 const (
 	Board  YoElement = "board"
 	Boards YoElement = "boards"
-	Card   YoElement = "card"
+	Column YoElement = "column"
 )

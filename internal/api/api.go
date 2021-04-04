@@ -9,11 +9,16 @@ import (
 	"yokanban-cli/internal/consts"
 	yohttp "yokanban-cli/internal/http"
 
+	guuid "github.com/google/uuid"
+
 	log "github.com/sirupsen/logrus"
 )
 
 // the HTTP request methods supported by yokanban
 type requestMethod string
+
+// YoAPPVersion defines the semver version-string of the yokanban app. Set it for compatibility reasons.
+const YoAPPVersion string = "0.4.12"
 
 const (
 	delete requestMethod = http.MethodDelete
@@ -56,6 +61,48 @@ func CreateBoard(model CreateBoardDTO) {
 		log.Fatal(err)
 	}
 	body := runHTTPRequest(consts.RouteBoard, string(payload), requestOptions{retries: 0, maxRetries: 2, method: post})
+	fmt.Println(body)
+}
+
+// CreateColumn runs an API call to create a column on a yokanban board.
+func CreateColumn(boardID string, name string) {
+	log.Debugf("CreateColumn()")
+	uuid := guuid.New()
+	column := ColumnEventDTO{
+		Type:      "ADD",
+		ElementID: uuid.String(),
+		NewValues: &ColumnDTO{
+			Type:  "COLUMN",
+			Title: name,
+			Shape: &ShapeDTO{
+				X:      396.5,
+				Y:      112.5,
+				Width:  350,
+				Height: 800,
+			},
+			Color:    "white",
+			WipLimit: 0,
+			IsLocked: false,
+			ID:       uuid.String(),
+			ZIndex:   1000,
+		},
+		SoftwareVersion: YoAPPVersion,
+	}
+
+	model := EventsContainerDTO{
+		Event: EventDTO{
+			Type:            "BULK",
+			Events:          &[]ColumnEventDTO{column},
+			SoftwareVersion: YoAPPVersion,
+		},
+	}
+
+	payload, err := json.Marshal(model)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	body := runHTTPRequest(path.Join(consts.RouteBoard, boardID), string(payload), requestOptions{retries: 0, maxRetries: 2, method: patch})
 	fmt.Println(body)
 }
 
