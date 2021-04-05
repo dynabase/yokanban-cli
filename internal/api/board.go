@@ -85,27 +85,27 @@ type Blocker struct {
 }
 
 // CreateBoard runs an API call to create a yokanban board.
-func CreateBoard(model CreateBoardDTO) string {
+func (api *API) CreateBoard(model CreateBoardDTO) string {
 	log.Debugf("CreateBoard()")
 	payload, err := json.Marshal(model)
 	if err != nil {
 		log.Fatal(err)
 	}
-	body := runHTTPRequest(consts.RouteBoard, string(payload), requestOptions{retries: 0, maxRetries: 2, method: post})
+	body := api.runHTTPRequest(consts.RouteBoard, string(payload), requestOptions{retries: 0, maxRetries: 2, method: post})
 	return body
 }
 
 // DeleteBoard runs an API call to delete a yokanban board.
-func DeleteBoard(id string) string {
+func (api *API) DeleteBoard(id string) string {
 	log.Debugf("DeleteBoard()")
-	body := runHTTPRequest(path.Join(consts.RouteBoard, id), "", requestOptions{retries: 0, maxRetries: 2, method: delete})
+	body := api.runHTTPRequest(path.Join(consts.RouteBoard, id), "", requestOptions{retries: 0, maxRetries: 2, method: delete})
 	return body
 }
 
 // GetBoard runs an API call to retrieve detail information of a yokanban board.
-func GetBoard(id string) BoardDetails {
+func (api *API) GetBoard(id string) BoardDetails {
 	log.Debugf("GetBoard()")
-	body := runHTTPRequest(path.Join(consts.RouteBoard, id), "", requestOptions{retries: 0, maxRetries: 2, method: get})
+	body := api.runHTTPRequest(path.Join(consts.RouteBoard, id), "", requestOptions{retries: 0, maxRetries: 2, method: get})
 
 	// extract the board details
 	var res GetBoardResponse
@@ -117,22 +117,22 @@ func GetBoard(id string) BoardDetails {
 }
 
 // UpdateBoard runs an API call to update a yokanban board.
-func UpdateBoard(id string, model UpdateBoardDTO) string {
+func (api *API) UpdateBoard(id string, model UpdateBoardDTO) string {
 	log.Debugf("UpdateBoard()")
 	payload, err := json.Marshal(model)
 	if err != nil {
 		log.Fatal(err)
 	}
 	// update the board name. Once more update possibilities have to be implemented, distinguish here.
-	body := runHTTPRequest(path.Join(consts.RouteBoard, id, "name"), string(payload), requestOptions{retries: 0, maxRetries: 2, method: patch})
+	body := api.runHTTPRequest(path.Join(consts.RouteBoard, id, "name"), string(payload), requestOptions{retries: 0, maxRetries: 2, method: patch})
 	return body
 }
 
 // ListBoards runs an API call to retrieve a list of yokanban boards the current user has access to.
-func ListBoards() BoardList {
+func (api *API) ListBoards() BoardList {
 	log.Debugf("ListBoards()")
 	// for the list of boards the user has to be retrieved. Be aware that "user" scope is needed therefore!
-	body := runHTTPRequest(consts.RouteBoard, "", requestOptions{retries: 0, maxRetries: 2, method: get})
+	body := api.runHTTPRequest(consts.RouteBoard, "", requestOptions{retries: 0, maxRetries: 2, method: get})
 
 	// extract the boards
 	var res ListBoardsResponse

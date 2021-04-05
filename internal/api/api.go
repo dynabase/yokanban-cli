@@ -28,17 +28,22 @@ type requestOptions struct {
 	maxRetries int
 }
 
+// API the basic struct.
+type API struct {
+	AccessToken accesstoken.TokenHandler
+}
+
 // Test runs an API call to test current credentials
-func Test() string {
+func (api *API) Test() string {
 	log.Debug("Test()")
-	body := runHTTPRequest(consts.RouteOauthTest, "", requestOptions{retries: 0, maxRetries: 2, method: get})
+	body := api.runHTTPRequest(consts.RouteOauthTest, "", requestOptions{retries: 0, maxRetries: 2, method: get})
 	return body
 }
 
-func runHTTPRequest(route string, jsonBody string, options requestOptions) string {
+func (api *API) runHTTPRequest(route string, jsonBody string, options requestOptions) string {
 	var body string
 	var err error
-	token := accesstoken.Get()
+	token := api.AccessToken.Get()
 	h := yohttp.HTTP{Client: &http.Client{}}
 
 	switch method := options.method; method {
@@ -60,11 +65,11 @@ func runHTTPRequest(route string, jsonBody string, options requestOptions) strin
 		}
 
 		// maybe token not valid anymore, create new one (will be cached for further requests)
-		accesstoken.Refresh()
+		api.AccessToken.Refresh()
 
 		// retry
 		retries := options.retries + 1
-		return runHTTPRequest(route, jsonBody, requestOptions{retries: retries, maxRetries: options.maxRetries, method: options.method})
+		return api.runHTTPRequest(route, jsonBody, requestOptions{retries: retries, maxRetries: options.maxRetries, method: options.method})
 	}
 	return body
 }

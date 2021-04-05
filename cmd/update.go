@@ -28,7 +28,8 @@ var updateBoardSubCmd = &cobra.Command{
 	Short:   "Update a yokanban board",
 	Example: "yokanban update board --id 605f526126f0535cfd7fd6c7 --name test-board-update",
 	Run: func(cmd *cobra.Command, args []string) {
-		body := api.UpdateBoard(updateID, api.UpdateBoardDTO{NewName: updateName})
+		a := getAPI()
+		body := a.UpdateBoard(updateID, api.UpdateBoardDTO{NewName: updateName})
 		fmt.Println(body)
 	},
 }

@@ -30,7 +30,8 @@ var createBoardSubCmd = &cobra.Command{
 	Short:   "Create a yokanban board",
 	Example: "yokanban create board --name test-board",
 	Run: func(cmd *cobra.Command, args []string) {
-		body := api.CreateBoard(api.CreateBoardDTO{Name: createName})
+		a := getAPI()
+		body := a.CreateBoard(api.CreateBoardDTO{Name: createName})
 		fmt.Println(body)
 	},
 }
@@ -41,7 +42,8 @@ var createColumnSubCmd = &cobra.Command{
 	Short:   "Create a yokanban column",
 	Example: "yokanban create column --name test-column --board-id 605f574e26f0535cfd7fd6cd",
 	Run: func(cmd *cobra.Command, args []string) {
-		details := api.CreateColumn(createOnBoardID, createName)
+		a := getAPI()
+		details := a.CreateColumn(createOnBoardID, createName)
 
 		// generate the pretty printed output
 		pretty, err := json.MarshalIndent(details, "", "  ")

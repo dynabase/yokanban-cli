@@ -2,7 +2,6 @@ package cmd
 
 import (
 	"fmt"
-	"yokanban-cli/internal/api"
 	"yokanban-cli/internal/elements"
 
 	log "github.com/sirupsen/logrus"
@@ -28,7 +27,8 @@ var deleteBoardSubCmd = &cobra.Command{
 	Short:   "Delete a yokanban board",
 	Example: "yokanban delete board --id 605f526126f0535cfd7fd6c7",
 	Run: func(cmd *cobra.Command, args []string) {
-		body := api.DeleteBoard(deleteID)
+		a := getAPI()
+		body := a.DeleteBoard(deleteID)
 		fmt.Println(body)
 	},
 }

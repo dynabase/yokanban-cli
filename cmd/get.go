@@ -3,7 +3,6 @@ package cmd
 import (
 	"encoding/json"
 	"fmt"
-	"yokanban-cli/internal/api"
 	"yokanban-cli/internal/elements"
 
 	log "github.com/sirupsen/logrus"
@@ -29,7 +28,8 @@ var getBoardSubCmd = &cobra.Command{
 	Short:   "Get a single yokanban board",
 	Example: "yokanban get board --id 605f526126f0535cfd7fd6c7",
 	Run: func(cmd *cobra.Command, args []string) {
-		details := api.GetBoard(getID)
+		a := getAPI()
+		details := a.GetBoard(getID)
 
 		// generate the pretty printed output
 		pretty, err := json.MarshalIndent(details, "", "  ")

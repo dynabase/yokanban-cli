@@ -28,8 +28,21 @@ type JWT struct {
 	Aud   string `json:"aud"`
 }
 
+// Auth the basic struct.
+type Auth struct{}
+
+// Authenticator is an auth interface.
+type Authenticator interface {
+	GetServiceAccountJWT() string
+}
+
+// NewAuthenticator creates a new instance of the Auth.
+func NewAuthenticator() Authenticator {
+	return &Auth{}
+}
+
 // GetServiceAccountJWT creates a JWT in order to retrieve access token from yokanban API.
-func GetServiceAccountJWT() string {
+func (a *Auth) GetServiceAccountJWT() string {
 	serviceAccountCredentials, err := getServiceAccountCredentials()
 	if err != nil {
 		log.Fatal(err)

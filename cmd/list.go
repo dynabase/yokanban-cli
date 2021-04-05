@@ -3,7 +3,6 @@ package cmd
 import (
 	"encoding/json"
 	"fmt"
-	"yokanban-cli/internal/api"
 	"yokanban-cli/internal/elements"
 
 	log "github.com/sirupsen/logrus"
@@ -28,7 +27,8 @@ var listBoardsSubCmd = &cobra.Command{
 	Short:   "Lists yokanban boards current user has access to",
 	Example: "yokanban list boards",
 	Run: func(cmd *cobra.Command, args []string) {
-		boardList := api.ListBoards()
+		a := getAPI()
+		boardList := a.ListBoards()
 
 		// generate the pretty printed output
 		boardsPretty, err := json.MarshalIndent(boardList, "", "  ")

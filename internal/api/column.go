@@ -60,10 +60,10 @@ type CreateColumnResponseDetails struct {
 }
 
 // CreateColumn runs an API call to create a column on a yokanban board.
-func CreateColumn(boardID string, name string) []CreateColumnResponseDetails {
+func (api *API) CreateColumn(boardID string, name string) []CreateColumnResponseDetails {
 	log.Debugf("CreateColumn()")
 	uuid := guuid.New()
-	shape := getShapeDTO(boardID)
+	shape := api.getShapeDTO(boardID)
 	column := ColumnEventDTO{
 		Type:      "ADD",
 		ElementID: uuid.String(),
@@ -93,7 +93,7 @@ func CreateColumn(boardID string, name string) []CreateColumnResponseDetails {
 		log.Fatal(err)
 	}
 
-	body := runHTTPRequest(path.Join(consts.RouteBoard, boardID), string(payload), requestOptions{retries: 0, maxRetries: 2, method: patch})
+	body := api.runHTTPRequest(path.Join(consts.RouteBoard, boardID), string(payload), requestOptions{retries: 0, maxRetries: 2, method: patch})
 
 	// extract the response data
 	var res CreateColumnResponse
@@ -104,10 +104,10 @@ func CreateColumn(boardID string, name string) []CreateColumnResponseDetails {
 	return res.Data
 }
 
-func getShapeDTO(boardID string) ShapeDTO {
+func (api *API) getShapeDTO(boardID string) ShapeDTO {
 	// retrieve columns of board to calculate next X and Y position based on far right column
-	boardDetails := GetBoard(boardID)
-	cols := getColumns(boardDetails)
+	boardDetails := api.GetBoard(boardID)
+	cols := api.getColumns(boardDetails)
 
 	shape := ShapeDTO{
 		X:      defaultX,
@@ -135,7 +135,7 @@ func getShapeDTO(boardID string) ShapeDTO {
 	return shape
 }
 
-func getColumns(boardDetails BoardDetails) []BoardElement {
+func (api *API) getColumns(boardDetails BoardDetails) []BoardElement {
 	var columns []BoardElement
 	for _, e := range boardDetails.Elements {
 		if e.Type == "COLUMN" {
