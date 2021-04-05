@@ -6,8 +6,8 @@ import (
 	"yokanban-cli/internal/api"
 	"yokanban-cli/internal/elements"
 
+	"github.com/google/uuid"
 	log "github.com/sirupsen/logrus"
-
 	"github.com/spf13/cobra"
 )
 
@@ -43,7 +43,7 @@ var createColumnSubCmd = &cobra.Command{
 	Example: "yokanban create column --name test-column --board-id 605f574e26f0535cfd7fd6cd",
 	Run: func(cmd *cobra.Command, args []string) {
 		a := getAPI()
-		details := a.CreateColumn(createOnBoardID, createName)
+		details := a.CreateColumn(createOnBoardID, createName, uuid.New())
 
 		// generate the pretty printed output
 		pretty, err := json.MarshalIndent(details, "", "  ")

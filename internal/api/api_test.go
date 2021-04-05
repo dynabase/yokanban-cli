@@ -8,7 +8,7 @@ import (
 	"yokanban-cli/internal/api"
 )
 
-func TestTestSuccess(t *testing.T) {
+func TestAPI_Test_Success(t *testing.T) {
 	defer gock.Off() // Flush pending mocks after test execution
 
 	gock.New("https://api.yokanban.io").
@@ -23,10 +23,10 @@ func TestTestSuccess(t *testing.T) {
 	a := api.API{AccessToken: tokenMock}
 	res := a.Test()
 	assert.Equal(t, "Ok", res)
-	assert.Equal(t, gock.IsDone(), true)
+	assert.Equal(t, true, gock.IsDone())
 }
 
-func TestTestRetrySuccess(t *testing.T) {
+func TestAPI_Test_Retry_Success(t *testing.T) {
 	defer gock.Off() // Flush pending mocks after test execution
 
 	gock.New("https://api.yokanban.io").
@@ -47,5 +47,5 @@ func TestTestRetrySuccess(t *testing.T) {
 	a := api.API{AccessToken: tokenMock}
 	res := a.Test()
 	assert.Equal(t, "Ok", res)
-	assert.Equal(t, gock.IsDone(), true)
+	assert.Equal(t, true, gock.IsDone())
 }

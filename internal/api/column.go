@@ -6,7 +6,7 @@ import (
 	"sort"
 	"yokanban-cli/internal/consts"
 
-	guuid "github.com/google/uuid"
+	"github.com/google/uuid"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -60,9 +60,8 @@ type CreateColumnResponseDetails struct {
 }
 
 // CreateColumn runs an API call to create a column on a yokanban board.
-func (api *API) CreateColumn(boardID string, name string) []CreateColumnResponseDetails {
+func (api *API) CreateColumn(boardID string, name string, uuid uuid.UUID) []CreateColumnResponseDetails {
 	log.Debugf("CreateColumn()")
-	uuid := guuid.New()
 	shape := api.getShapeDTO(boardID)
 	column := ColumnEventDTO{
 		Type:      "ADD",
