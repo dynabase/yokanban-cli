@@ -26,6 +26,7 @@ type requestOptions struct {
 	method     requestMethod
 	retries    int
 	maxRetries int
+	token      string
 }
 
 // API the basic struct.
@@ -43,7 +44,12 @@ func (api *API) Test() string {
 func (api *API) runHTTPRequest(route string, jsonBody string, options requestOptions) string {
 	var body string
 	var err error
-	token := api.AccessToken.Get()
+
+	token := options.token
+	if token == "" {
+		token = api.AccessToken.Get()
+	}
+
 	h := yohttp.HTTP{Client: &http.Client{}}
 
 	switch method := options.method; method {
@@ -65,11 +71,11 @@ func (api *API) runHTTPRequest(route string, jsonBody string, options requestOpt
 		}
 
 		// maybe token not valid anymore, create new one (will be cached for further requests)
-		api.AccessToken.Refresh()
+		refreshToken := api.AccessToken.Refresh()
 
 		// retry
 		retries := options.retries + 1
-		return api.runHTTPRequest(route, jsonBody, requestOptions{retries: retries, maxRetries: options.maxRetries, method: options.method})
+		return api.runHTTPRequest(route, jsonBody, requestOptions{retries: retries, maxRetries: options.maxRetries, method: options.method, token: refreshToken})
 	}
 	return body
 }
