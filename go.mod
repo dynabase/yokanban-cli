@@ -5,7 +5,7 @@ go 1.16
 require (
 	github.com/dvsekhvalnov/jose2go v1.5.0
 	github.com/fsnotify/fsnotify v1.4.9 // indirect
-	github.com/google/uuid v1.2.0 // indirect
+	github.com/google/uuid v1.2.0
 	github.com/joho/godotenv v1.3.0
 	github.com/kr/text v0.2.0 // indirect
 	github.com/magiconair/properties v1.8.5 // indirect

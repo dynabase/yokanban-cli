@@ -11,3 +11,13 @@ type UserDTO struct {
 	Bookmarks   []BookmarkDTO `json:"bookmarks"`
 	LastBoardID string        `json:"lastBoardId"`
 }
+
+// UserResponseDTO represents the exchange format of a user API response.
+type UserResponseDTO struct {
+	Success bool `json:"success"`
+	Data    struct {
+		*UserDTO
+		Boards       []BoardDTO `json:"boards"`
+		IsSocialUser bool       `json:"isSocialUser"`
+	} `json:"data"`
+}
