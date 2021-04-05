@@ -8,12 +8,6 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
-// BoardListResponseDTO represents the exchange format of a board-list API response.
-type BoardListResponseDTO struct {
-	Success bool       `json:"success"`
-	Data    []BoardDTO `json:"data"`
-}
-
 // BoardDTO represents the exchange format of a single yokanban board.
 type BoardDTO struct {
 	ID        string      `json:"_id"`
@@ -51,6 +45,45 @@ type UpdateBoardDTO struct {
 	NewName string `json:"newName,omitempty"`
 }
 
+// GetBoardResponse represents the result of a get board API response.
+type GetBoardResponse struct {
+	Success bool         `json:"success"`
+	Data    BoardDetails `json:"data"`
+}
+
+// BoardDetails represents the detail dataset of a yokanban board.
+type BoardDetails struct {
+	Avatars  []AvatarDTO    `json:"avatars"`
+	Elements []BoardElement `json:"elements"`
+}
+
+// ListBoardsResponse represents the result of a list board API response.
+type ListBoardsResponse struct {
+	Success bool       `json:"success"`
+	Data    []BoardDTO `json:"data"`
+}
+
+// BoardElement represents an element of a yokanban board.
+type BoardElement struct {
+	AssignedAvatars []string  `json:"assignedAvatars"`
+	Blockers        []Blocker `json:"blockers"`
+	Type            string    `json:"type"`
+	Shape           ShapeDTO  `json:"shape"`
+	Color           string    `json:"color"`
+	Title           string    `json:"title"`
+	IsArchived      bool      `json:"isArchived"`
+	ZIndex          int       `json:"zIndex"`
+	ID              string    `json:"id"`
+}
+
+// Blocker represents a blocker typically assigned to a card.
+type Blocker struct {
+	ID          string `json:"_id"`
+	Description string `json:"description"`
+	CreateAt    string `json:"createdAt"`
+	CardID      string `json:"cardId"`
+}
+
 // CreateBoard runs an API call to create a yokanban board.
 func CreateBoard(model CreateBoardDTO) string {
 	log.Debugf("CreateBoard()")
@@ -70,10 +103,17 @@ func DeleteBoard(id string) string {
 }
 
 // GetBoard runs an API call to retrieve detail information of a yokanban board.
-func GetBoard(id string) string {
+func GetBoard(id string) BoardDetails {
 	log.Debugf("GetBoard()")
 	body := runHTTPRequest(path.Join(consts.RouteBoard, id), "", requestOptions{retries: 0, maxRetries: 2, method: get})
-	return body
+
+	// extract the board details
+	var res GetBoardResponse
+	if err := json.Unmarshal([]byte(body), &res); err != nil {
+		log.Fatal(err)
+	}
+
+	return res.Data
 }
 
 // UpdateBoard runs an API call to update a yokanban board.
@@ -95,7 +135,7 @@ func ListBoards() BoardList {
 	body := runHTTPRequest(consts.RouteBoard, "", requestOptions{retries: 0, maxRetries: 2, method: get})
 
 	// extract the boards
-	var res BoardListResponseDTO
+	var res ListBoardsResponse
 	if err := json.Unmarshal([]byte(body), &res); err != nil {
 		log.Fatal(err)
 	}
