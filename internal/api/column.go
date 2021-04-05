@@ -2,8 +2,8 @@ package api
 
 import (
 	"encoding/json"
-	"fmt"
 	"path"
+	"sort"
 	"yokanban-cli/internal/consts"
 
 	guuid "github.com/google/uuid"
@@ -85,16 +85,42 @@ func CreateColumn(boardID string, name string) string {
 }
 
 func getShapeDTO(boardID string) ShapeDTO {
-	// retrieve columns of board
-	body := GetBoard(boardID)
-	fmt.Println(body)
+	// retrieve columns of board to calculate next X and Y position based on far right column
+	boardDetails := GetBoard(boardID)
+	cols := getColumns(boardDetails)
 
-	// TODO get next X and Y position based on far right column
-
-	return ShapeDTO{
+	shape := ShapeDTO{
 		X:      defaultX,
 		Y:      defaultY,
 		Width:  defaultWidth,
 		Height: defaultHeight,
 	}
+
+	if len(cols) == 0 {
+		return shape
+	}
+
+	// sort by x value
+	sort.Slice(cols, func(i, j int) bool {
+		return cols[i].Shape.X < cols[j].Shape.X
+	})
+
+	lastCol := cols[len(cols)-1]
+
+	shape.X = lastCol.Shape.X + float32(lastCol.Shape.Width)
+	shape.Y = lastCol.Shape.Y
+	shape.Width = lastCol.Shape.Width
+	shape.Height = lastCol.Shape.Height
+
+	return shape
+}
+
+func getColumns(boardDetails BoardDetails) []BoardElement {
+	var columns []BoardElement
+	for _, e := range boardDetails.Elements {
+		if e.Type == "COLUMN" {
+			columns = append(columns, e)
+		}
+	}
+	return columns
 }
