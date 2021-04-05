@@ -11,10 +11,11 @@ import (
 )
 
 const (
-	defaultX      float32 = 396.5
-	defaultY      float32 = 112.5
-	defaultWidth  int     = 350
-	defaultHeight int     = 800
+	defaultX       float32 = 396.5
+	defaultY       float32 = 112.5
+	defaultWidth   int     = 350
+	defaultHeight  int     = 800
+	defaultOffsetX float32 = 0
 )
 
 // ColumnEventDTO represents the exchange format to create an event for a single yokanban column.
@@ -107,7 +108,7 @@ func getShapeDTO(boardID string) ShapeDTO {
 
 	lastCol := cols[len(cols)-1]
 
-	shape.X = lastCol.Shape.X + float32(lastCol.Shape.Width)
+	shape.X = lastCol.Shape.X + float32(lastCol.Shape.Width) + defaultOffsetX
 	shape.Y = lastCol.Shape.Y
 	shape.Width = lastCol.Shape.Width
 	shape.Height = lastCol.Shape.Height
