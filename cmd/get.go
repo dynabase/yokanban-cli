@@ -16,7 +16,7 @@ var getID string
 // getCmd represents the get command
 var getCmd = &cobra.Command{
 	Use:       "get",
-	Short:     "Get single yokanban resources like boards, cards, etc.",
+	Short:     "Get yokanban resources like boards, cards, etc.",
 	Example:   "yokanban get board --id 605f526126f0535cfd7fd6c7",
 	ValidArgs: []string{string(elements.Board)},
 	Args:      cobra.ExactValidArgs(1),

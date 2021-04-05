@@ -14,7 +14,7 @@ import (
 // listCmd represents the list command
 var listCmd = &cobra.Command{
 	Use:       "list",
-	Short:     "Lists yokanban resources like boards, cards, etc.",
+	Short:     "List yokanban resources like boards, cards, etc.",
 	Example:   "yokanban list boards",
 	ValidArgs: []string{string(elements.Boards), string(elements.Board)},
 	Args:      cobra.ExactValidArgs(1),

@@ -15,7 +15,7 @@ var updateName string
 // updateCmd represents the update command
 var updateCmd = &cobra.Command{
 	Use:       "update",
-	Short:     "Updates yokanban resources like boards, cards, etc.",
+	Short:     "Update yokanban resources like boards, cards, etc.",
 	Example:   "yokanban update board --id 605f526126f0535cfd7fd6c7 --name test-board-update",
 	ValidArgs: []string{string(elements.Board)},
 	Args:      cobra.ExactValidArgs(1),
