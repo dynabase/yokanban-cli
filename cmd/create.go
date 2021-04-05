@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"encoding/json"
 	"fmt"
 	"yokanban-cli/internal/api"
 	"yokanban-cli/internal/elements"
@@ -40,8 +41,14 @@ var createColumnSubCmd = &cobra.Command{
 	Short:   "Create a yokanban column",
 	Example: "yokanban create column --name test-column --board-id 605f574e26f0535cfd7fd6cd",
 	Run: func(cmd *cobra.Command, args []string) {
-		body := api.CreateColumn(createOnBoardID, createName)
-		fmt.Println(body)
+		details := api.CreateColumn(createOnBoardID, createName)
+
+		// generate the pretty printed output
+		pretty, err := json.MarshalIndent(details, "", "  ")
+		if err != nil {
+			log.Fatal(err)
+		}
+		fmt.Println(string(pretty))
 	},
 }
 

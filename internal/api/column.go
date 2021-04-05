@@ -47,8 +47,20 @@ type ShapeDTO struct {
 	Height int     `json:"height"`
 }
 
+// CreateColumnResponse represents the result of a create column API response.
+type CreateColumnResponse struct {
+	Success bool                          `json:"success"`
+	Data    []CreateColumnResponseDetails `json:"data"`
+}
+
+// CreateColumnResponseDetails represents the detail information of a create column API response.
+type CreateColumnResponseDetails struct {
+	NewID string `json:"newId"`
+	OldID string `json:"oldId"`
+}
+
 // CreateColumn runs an API call to create a column on a yokanban board.
-func CreateColumn(boardID string, name string) string {
+func CreateColumn(boardID string, name string) []CreateColumnResponseDetails {
 	log.Debugf("CreateColumn()")
 	uuid := guuid.New()
 	shape := getShapeDTO(boardID)
@@ -82,7 +94,14 @@ func CreateColumn(boardID string, name string) string {
 	}
 
 	body := runHTTPRequest(path.Join(consts.RouteBoard, boardID), string(payload), requestOptions{retries: 0, maxRetries: 2, method: patch})
-	return body
+
+	// extract the response data
+	var res CreateColumnResponse
+	if err := json.Unmarshal([]byte(body), &res); err != nil {
+		log.Fatal(err)
+	}
+
+	return res.Data
 }
 
 func getShapeDTO(boardID string) ShapeDTO {
