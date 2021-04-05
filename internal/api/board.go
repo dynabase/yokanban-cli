@@ -8,6 +8,12 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
+// BoardListResponseDTO represents the exchange format of a board-list API response.
+type BoardListResponseDTO struct {
+	Success bool       `json:"success"`
+	Data    []BoardDTO `json:"data"`
+}
+
 // BoardDTO represents the exchange format of a single yokanban board.
 type BoardDTO struct {
 	ID        string      `json:"_id"`
@@ -83,30 +89,24 @@ func UpdateBoard(id string, model UpdateBoardDTO) string {
 }
 
 // ListBoards runs an API call to retrieve a list of yokanban boards the current user has access to.
-func ListBoards() string {
+func ListBoards() BoardList {
 	log.Debugf("ListBoards()")
 	// for the list of boards the user has to be retrieved. Be aware that "user" scope is needed therefore!
-	body := runHTTPRequest(consts.RouteUser, "", requestOptions{retries: 0, maxRetries: 2, method: get})
+	body := runHTTPRequest(consts.RouteBoard, "", requestOptions{retries: 0, maxRetries: 2, method: get})
 
 	// extract the boards
-	var res UserResponseDTO
+	var res BoardListResponseDTO
 	if err := json.Unmarshal([]byte(body), &res); err != nil {
 		log.Fatal(err)
 	}
 
 	// create a boardList out of the response
 	boardList := BoardList{}
-	for _, b := range res.Data.Boards {
+	for _, b := range res.Data {
 		board := &BoardShort{}
 		board.Map(&b)
 		boardList = append(boardList, board)
 	}
 
-	// generate the pretty printed output
-	boardsPretty, err := json.MarshalIndent(boardList, "", "  ")
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	return string(boardsPretty)
+	return boardList
 }
