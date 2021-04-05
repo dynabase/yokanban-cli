@@ -1,7 +1,6 @@
 package api
 
 import (
-	"fmt"
 	"net/http"
 	"yokanban-cli/internal/accesstoken"
 	"yokanban-cli/internal/consts"
@@ -30,10 +29,10 @@ type requestOptions struct {
 }
 
 // Test runs an API call to test current credentials
-func Test() {
+func Test() string {
 	log.Debug("Test()")
 	body := runHTTPRequest(consts.RouteOauthTest, "", requestOptions{retries: 0, maxRetries: 2, method: get})
-	fmt.Println(body)
+	return body
 }
 
 func runHTTPRequest(route string, jsonBody string, options requestOptions) string {

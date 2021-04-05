@@ -10,6 +10,13 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
+const (
+	defaultX      float32 = 396.5
+	defaultY      float32 = 112.5
+	defaultWidth  int     = 350
+	defaultHeight int     = 800
+)
+
 // ColumnEventDTO represents the exchange format to create an event for a single yokanban column.
 type ColumnEventDTO struct {
 	Type            string     `json:"type"`
@@ -40,21 +47,17 @@ type ShapeDTO struct {
 }
 
 // CreateColumn runs an API call to create a column on a yokanban board.
-func CreateColumn(boardID string, name string) {
+func CreateColumn(boardID string, name string) string {
 	log.Debugf("CreateColumn()")
 	uuid := guuid.New()
+	shape := getShapeDTO(boardID)
 	column := ColumnEventDTO{
 		Type:      "ADD",
 		ElementID: uuid.String(),
 		NewValues: &ColumnDTO{
-			Type:  "COLUMN",
-			Title: name,
-			Shape: &ShapeDTO{
-				X:      396.5,
-				Y:      112.5,
-				Width:  350,
-				Height: 800,
-			},
+			Type:     "COLUMN",
+			Title:    name,
+			Shape:    &shape,
 			Color:    "white",
 			WipLimit: 0,
 			IsLocked: false,
@@ -78,5 +81,20 @@ func CreateColumn(boardID string, name string) {
 	}
 
 	body := runHTTPRequest(path.Join(consts.RouteBoard, boardID), string(payload), requestOptions{retries: 0, maxRetries: 2, method: patch})
+	return body
+}
+
+func getShapeDTO(boardID string) ShapeDTO {
+	// retrieve columns of board
+	body := GetBoard(boardID)
 	fmt.Println(body)
+
+	// TODO get next X and Y position based on far right column
+
+	return ShapeDTO{
+		X:      defaultX,
+		Y:      defaultY,
+		Width:  defaultWidth,
+		Height: defaultHeight,
+	}
 }

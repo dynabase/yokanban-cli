@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"fmt"
 	"yokanban-cli/internal/api"
 	"yokanban-cli/internal/elements"
 
@@ -28,7 +29,8 @@ var createBoardSubCmd = &cobra.Command{
 	Short:   "Create a yokanban board",
 	Example: "yokanban create board --name test-board",
 	Run: func(cmd *cobra.Command, args []string) {
-		api.CreateBoard(api.CreateBoardDTO{Name: createName})
+		body := api.CreateBoard(api.CreateBoardDTO{Name: createName})
+		fmt.Println(body)
 	},
 }
 
@@ -38,7 +40,8 @@ var createColumnSubCmd = &cobra.Command{
 	Short:   "Create a yokanban column",
 	Example: "yokanban create column --name test-column --board-id 605f574e26f0535cfd7fd6cd",
 	Run: func(cmd *cobra.Command, args []string) {
-		api.CreateColumn(createOnBoardID, createName)
+		body := api.CreateColumn(createOnBoardID, createName)
+		fmt.Println(body)
 	},
 }
 

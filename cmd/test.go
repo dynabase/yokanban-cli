@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"fmt"
 	"yokanban-cli/internal/api"
 
 	"github.com/spf13/cobra"
@@ -12,7 +13,8 @@ var testCmd = &cobra.Command{
 	Short: "Test your API credentials",
 	Long:  `Test your API credentials. If the response is "OK", everything is set up correctly.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		api.Test()
+		body := api.Test()
+		fmt.Println(body)
 	},
 }
 

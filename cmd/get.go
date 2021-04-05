@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"fmt"
 	"yokanban-cli/internal/api"
 	"yokanban-cli/internal/elements"
 
@@ -27,7 +28,8 @@ var getBoardSubCmd = &cobra.Command{
 	Short:   "Get a single yokanban board",
 	Example: "yokanban get board --id 605f526126f0535cfd7fd6c7",
 	Run: func(cmd *cobra.Command, args []string) {
-		api.GetBoard(getID)
+		body := api.GetBoard(getID)
+		fmt.Println(body)
 	},
 }
 

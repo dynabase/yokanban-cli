@@ -2,7 +2,6 @@ package api
 
 import (
 	"encoding/json"
-	"fmt"
 	"path"
 	"yokanban-cli/internal/consts"
 
@@ -47,32 +46,32 @@ type UpdateBoardDTO struct {
 }
 
 // CreateBoard runs an API call to create a yokanban board.
-func CreateBoard(model CreateBoardDTO) {
+func CreateBoard(model CreateBoardDTO) string {
 	log.Debugf("CreateBoard()")
 	payload, err := json.Marshal(model)
 	if err != nil {
 		log.Fatal(err)
 	}
 	body := runHTTPRequest(consts.RouteBoard, string(payload), requestOptions{retries: 0, maxRetries: 2, method: post})
-	fmt.Println(body)
+	return body
 }
 
 // DeleteBoard runs an API call to delete a yokanban board.
-func DeleteBoard(id string) {
+func DeleteBoard(id string) string {
 	log.Debugf("DeleteBoard()")
 	body := runHTTPRequest(path.Join(consts.RouteBoard, id), "", requestOptions{retries: 0, maxRetries: 2, method: delete})
-	fmt.Println(body)
+	return body
 }
 
 // GetBoard runs an API call to retrieve detail information of a yokanban board.
-func GetBoard(id string) {
+func GetBoard(id string) string {
 	log.Debugf("GetBoard()")
 	body := runHTTPRequest(path.Join(consts.RouteBoard, id), "", requestOptions{retries: 0, maxRetries: 2, method: get})
-	fmt.Println(body)
+	return body
 }
 
 // UpdateBoard runs an API call to update a yokanban board.
-func UpdateBoard(id string, model UpdateBoardDTO) {
+func UpdateBoard(id string, model UpdateBoardDTO) string {
 	log.Debugf("UpdateBoard()")
 	payload, err := json.Marshal(model)
 	if err != nil {
@@ -80,11 +79,11 @@ func UpdateBoard(id string, model UpdateBoardDTO) {
 	}
 	// update the board name. Once more update possibilities have to be implemented, distinguish here.
 	body := runHTTPRequest(path.Join(consts.RouteBoard, id, "name"), string(payload), requestOptions{retries: 0, maxRetries: 2, method: patch})
-	fmt.Println(body)
+	return body
 }
 
 // ListBoards runs an API call to retrieve a list of yokanban boards the current user has access to.
-func ListBoards() {
+func ListBoards() string {
 	log.Debugf("ListBoards()")
 	// for the list of boards the user has to be retrieved. Be aware that "user" scope is needed therefore!
 	body := runHTTPRequest(consts.RouteUser, "", requestOptions{retries: 0, maxRetries: 2, method: get})
@@ -109,5 +108,5 @@ func ListBoards() {
 		log.Fatal(err)
 	}
 
-	fmt.Println(string(boardsPretty))
+	return string(boardsPretty)
 }

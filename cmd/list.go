@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"fmt"
 	"yokanban-cli/internal/api"
 	"yokanban-cli/internal/elements"
 
@@ -24,7 +25,8 @@ var listBoardsSubCmd = &cobra.Command{
 	Short:   "Lists yokanban boards current user has access to",
 	Example: "yokanban list boards",
 	Run: func(cmd *cobra.Command, args []string) {
-		api.ListBoards()
+		body := api.ListBoards()
+		fmt.Println(body)
 	},
 }
 
