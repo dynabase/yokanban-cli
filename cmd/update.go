@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"fmt"
 	"yokanban-cli/internal/api"
 	"yokanban-cli/internal/elements"
 
@@ -14,7 +15,7 @@ var updateName string
 // updateCmd represents the update command
 var updateCmd = &cobra.Command{
 	Use:       "update",
-	Short:     "Updates yokanban resources like boards, cards, etc.",
+	Short:     "Update yokanban resources like boards, cards, etc.",
 	Example:   "yokanban update board --id 605f526126f0535cfd7fd6c7 --name test-board-update",
 	ValidArgs: []string{string(elements.Board)},
 	Args:      cobra.ExactValidArgs(1),
@@ -27,7 +28,9 @@ var updateBoardSubCmd = &cobra.Command{
 	Short:   "Update a yokanban board",
 	Example: "yokanban update board --id 605f526126f0535cfd7fd6c7 --name test-board-update",
 	Run: func(cmd *cobra.Command, args []string) {
-		api.UpdateBoard(updateID, api.UpdateBoardDTO{NewName: updateName})
+		a := getAPI()
+		body := a.UpdateBoard(updateID, api.UpdateBoardDTO{NewName: updateName})
+		fmt.Println(body)
 	},
 }
 

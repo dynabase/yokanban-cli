@@ -14,20 +14,36 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
+// AccessToken the basic struct.
+type AccessToken struct {
+	Auth auth.Authenticator
+}
+
+// TokenHandler is an accesstoken interface.
+type TokenHandler interface {
+	Get() string
+	Refresh() string
+}
+
+// NewAccessToken creates a new instance of the AccessToken.
+func NewAccessToken(auth auth.Authenticator) TokenHandler {
+	return &AccessToken{Auth: auth}
+}
+
 // Get retrieves either an access token from cache or creates a new one.
-func Get() string {
+func (token *AccessToken) Get() string {
 	log.Debug("Get")
 	if cachedToken := getCachedAccessToken(); cachedToken != "" {
 		log.Debug("\t Get - return cached access token")
 		return cachedToken
 	}
-	return Refresh()
+	return token.Refresh()
 }
 
 // Refresh creates a new access token and overwrites cached one.
-func Refresh() string {
+func (token *AccessToken) Refresh() string {
 	log.Debug("Refresh")
-	jwt := auth.GetServiceAccountJWT()
+	jwt := token.Auth.GetServiceAccountJWT()
 	h := yohttp.HTTP{Client: &http.Client{}}
 	tokenData, err := h.Auth(jwt)
 	if err != nil {

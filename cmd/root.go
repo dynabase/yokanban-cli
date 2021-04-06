@@ -3,6 +3,9 @@ package cmd
 import (
 	"fmt"
 	"os"
+	"yokanban-cli/internal/accesstoken"
+	"yokanban-cli/internal/api"
+	"yokanban-cli/internal/auth"
 
 	"github.com/spf13/cobra"
 
@@ -16,7 +19,7 @@ var cfgFile string
 var rootCmd = &cobra.Command{
 	Use:   "yokanban",
 	Short: "Manage your yokanban account via command line",
-	Long: `yokanban - a modern board that inspires flow and communication. 
+	Long: `yokanban - a modern board that inspires flow and communication.
 
 It feels like a real whiteboard, but with all the benefits of a digital tool.
 In order to use this CLI please create a service account at https://yokanban.io/ and store the credentials as 'yokanban.keys.json'`,
@@ -66,4 +69,10 @@ func initConfig() {
 	if err := viper.ReadInConfig(); err == nil {
 		fmt.Fprintln(os.Stderr, "Using config file:", viper.ConfigFileUsed())
 	}
+}
+
+func getAPI() *api.API {
+	a := auth.NewAuthenticator()
+	token := accesstoken.NewAccessToken(a)
+	return &api.API{AccessToken: token}
 }

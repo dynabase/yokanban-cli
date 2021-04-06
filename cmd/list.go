@@ -1,8 +1,11 @@
 package cmd
 
 import (
-	"yokanban-cli/internal/api"
+	"encoding/json"
+	"fmt"
 	"yokanban-cli/internal/elements"
+
+	log "github.com/sirupsen/logrus"
 
 	"github.com/spf13/cobra"
 )
@@ -10,7 +13,7 @@ import (
 // listCmd represents the list command
 var listCmd = &cobra.Command{
 	Use:       "list",
-	Short:     "Lists yokanban resources like boards, cards, etc.",
+	Short:     "List yokanban resources like boards, cards, etc.",
 	Example:   "yokanban list boards",
 	ValidArgs: []string{string(elements.Boards), string(elements.Board)},
 	Args:      cobra.ExactValidArgs(1),
@@ -24,7 +27,15 @@ var listBoardsSubCmd = &cobra.Command{
 	Short:   "Lists yokanban boards current user has access to",
 	Example: "yokanban list boards",
 	Run: func(cmd *cobra.Command, args []string) {
-		api.ListBoards()
+		a := getAPI()
+		boardList := a.ListBoards()
+
+		// generate the pretty printed output
+		boardsPretty, err := json.MarshalIndent(boardList, "", "  ")
+		if err != nil {
+			log.Fatal(err)
+		}
+		fmt.Println(string(boardsPretty))
 	},
 }
 

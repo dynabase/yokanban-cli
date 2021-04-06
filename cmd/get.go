@@ -1,7 +1,8 @@
 package cmd
 
 import (
-	"yokanban-cli/internal/api"
+	"encoding/json"
+	"fmt"
 	"yokanban-cli/internal/elements"
 
 	log "github.com/sirupsen/logrus"
@@ -14,7 +15,7 @@ var getID string
 // getCmd represents the get command
 var getCmd = &cobra.Command{
 	Use:       "get",
-	Short:     "Get single yokanban resources like boards, cards, etc.",
+	Short:     "Get yokanban resources like boards, cards, etc.",
 	Example:   "yokanban get board --id 605f526126f0535cfd7fd6c7",
 	ValidArgs: []string{string(elements.Board)},
 	Args:      cobra.ExactValidArgs(1),
@@ -27,7 +28,15 @@ var getBoardSubCmd = &cobra.Command{
 	Short:   "Get a single yokanban board",
 	Example: "yokanban get board --id 605f526126f0535cfd7fd6c7",
 	Run: func(cmd *cobra.Command, args []string) {
-		api.GetBoard(getID)
+		a := getAPI()
+		details := a.GetBoard(getID)
+
+		// generate the pretty printed output
+		pretty, err := json.MarshalIndent(details, "", "  ")
+		if err != nil {
+			log.Fatal(err)
+		}
+		fmt.Println(string(pretty))
 	},
 }
 
