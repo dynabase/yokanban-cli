@@ -25,6 +25,7 @@ linters:
     - goprintffuncname
     - gosimple
     - govet
+    - ineffassign
     - misspell
     - prealloc
     - rowserrcheck
