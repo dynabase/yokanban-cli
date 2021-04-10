@@ -16,7 +16,7 @@ deps-dev:
 .PHONY: clean
 clean:
 	go clean
-	rm -rf ./build
+	rm -rf ./dist
 	rm -f coverage.out
 
 .PHONY: run
@@ -51,7 +51,7 @@ test-html:
 
 .PHONY: build-release
 build-release: clean
-	env CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -a -ldflags '-extldflags "-static"' -o build/yokanban_linux
+	env CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -a -ldflags '-extldflags "-static"' -o dist/yokanban_linux
 
 .PHONY: install
 install:
