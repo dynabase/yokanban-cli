@@ -7,7 +7,6 @@ issues:
   include:
     - EXC0002
 
-# default linters are run anyways.
 # run `golangci-lint help linters` to find out more about each available linter.
 linters:
   disable-all: true
