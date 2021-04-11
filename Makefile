@@ -1,6 +1,6 @@
 version := $(shell cat VERSION | xargs)
 
-# common builds flags (also improve reproducibility)
+# common build flags (also improve reproducibility)
 build_flags=-ldflags='-buildid= -extldflags "-static" -X "yokanban-cli/cmd.version=$(version)"' -trimpath
 
 .PHONY: all
