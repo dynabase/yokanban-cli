@@ -68,5 +68,5 @@ func determineVersion() string {
 		return fmt.Sprintf("%s-SNAPSHOT", detectedVersion)
 	}
 
-	return version
+	return defaultVersion
 }
