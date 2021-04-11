@@ -12,7 +12,7 @@ var version = "SNAPSHOT"
 var versionCmd = &cobra.Command{
 	Use:   "version",
 	Short: "Print the version number of yokanban-cli",
-	Long: "Print the version number of yokanban-cli",
+	Long:  "Print the version number of yokanban-cli",
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("yokanban-cli version", version)
 	},
