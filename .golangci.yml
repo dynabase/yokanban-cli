@@ -7,25 +7,34 @@ issues:
   include:
     - EXC0002
 
-# default linters are run anyways.
 # run `golangci-lint help linters` to find out more about each available linter.
 linters:
+  disable-all: true
   enable:
     - bodyclose
+    - deadcode
+    - errcheck
     - exportloopref
     - goconst
-    - goimports
-    - golint
-    - gofmt
     # TODO: enable after fixing lint errors
     #- gocritic
+    - gofmt
+    - goimports
+    - golint
     - goprintffuncname
+    - gosimple
+    - govet
+    - ineffassign
     - misspell
     - prealloc
     - rowserrcheck
     - sqlclosecheck
+    - staticcheck
+    - structcheck
+    - typecheck
     - unconvert
     - unparam
+    - varcheck
     - whitespace
 linters-settings:
   golint:

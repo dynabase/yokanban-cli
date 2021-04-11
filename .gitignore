@@ -1,5 +1,5 @@
-build
-.env
-.idea
+/dist
+/.env
+/.idea
 coverage.out
 yokanban.keys.json
