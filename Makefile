@@ -1,3 +1,8 @@
+version := $(shell cat VERSION | xargs)
+
+# common build flags (also improve reproducibility)
+build_flags=-ldflags='-buildid= -extldflags "-static" -X "yokanban-cli/cmd.version=$(version)"' -trimpath
+
 .PHONY: all
 all: clean deps build-release
 
@@ -51,10 +56,10 @@ test-html:
 
 .PHONY: build-release
 build-release: clean
-	env CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -a -ldflags '-extldflags "-static"' -o dist/yokanban_linux
+	env CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -a $(build_flags) -o dist/yokanban_linux
 
 .PHONY: install
 install:
-	go build -o yokanban
+	go build $(build_flags) -o yokanban
 	@mv yokanban ${GOPATH}/bin/
 	@echo "Run 'yokanban help' for further instructions..."
