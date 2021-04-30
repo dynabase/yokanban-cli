@@ -2,6 +2,8 @@
 
 A powerful command line interface for [yokanban](httsp://yokanban.io) written in Go.
 
+![yokanban board](./docs/imgs/yokanban.png "yokanban board")
+
 [For contributing, please read the guidelines](CONTRIBUTING.md)
 
 # Getting started
