@@ -49,7 +49,7 @@ yokanban cli commands are structured in following way `yokanban <command> <arg> 
 
 #### Create board
 
-    yokanban create board --name test-board
+    yokanban create board --title test-board
 
 #### Delete board
 
@@ -63,18 +63,21 @@ yokanban cli commands are structured in following way `yokanban <command> <arg> 
 
     yokanban list boards
 
-#### Update board (name)
+#### Update board (title)
 
-    yokanban update board --id 605f574e26f0535cfd7fd6cd --name test-board-udpated
+    yokanban update board --id 605f574e26f0535cfd7fd6cd --title test-board-udpated
 
 ### Columns
 
 #### Create column
 
-    yokanban create column --board-id 605f574e26f0535cfd7fd6cd
+    yokanban create column --title test-col --board-id 605f574e26f0535cfd7fd6cd
 
 ### Cards
-(in progress)
+
+#### Create card
+
+    yokanban create card --title test-card --board-id 605f574e26f0535cfd7fd6cd
 
 
 # Improve your developer experience (PLANNED)
@@ -91,17 +94,17 @@ See how a possible development flow could look like:
 # project setup
 $ git clone git@github.com:MY-PROJECT.git
 
-$ yokanban create board --name MY-PROJECT
-$ yokanban create column --name "ToDo" --board MY-PROJECT
-$ yokanban create column --name "In Progress" --board MY-PROJECT
-$ yokanban create column --name "In Review" --board MY-PROJECT
-$ yokanban create column --name "Done" --board MY-PROJECT
+$ yokanban create board --title MY-PROJECT
+$ yokanban create column --title "ToDo" --board MY-PROJECT
+$ yokanban create column --title "In Progress" --board MY-PROJECT
+$ yokanban create column --title "In Review" --board MY-PROJECT
+$ yokanban create column --title "Done" --board MY-PROJECT
 
 
 # prepare feature implementation
 $ git checkout -b featureA
 
-$ yokanban create card --name featureA --description "A beautiful new feature" --board MY-PROJECT --column "ToDo" --assign-me
+$ yokanban create card --title featureA --description "A beautiful new feature" --board MY-PROJECT --column "ToDo" --assign-me
 FOO-1
 
 # start implementing
@@ -129,6 +132,6 @@ $ yokanban move card --id "FOO-1" --column "Done"
 Create a ticket for it, so you won't forget it to fix it:
 
 ```shell
-$ yokanban create card --color red --name "Wrong http status code" --description "Wrong http status code at REST api route PATCH /foo/bar" --board MY-PROJECT --column "ToDo"
+$ yokanban create card --color red --title "Wrong http status code" --description "Wrong http status code at REST api route PATCH /foo/bar" --board MY-PROJECT --column "ToDo"
 FOO-478
 ```

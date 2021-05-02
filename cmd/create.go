@@ -27,15 +27,15 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var createName string
+var createTitle string
 var createOnBoardID string
 
 // createCmd represents the root create command
 var createCmd = &cobra.Command{
 	Use:       "create [element]",
 	Short:     "Create yokanban resources like boards, cards, etc.",
-	Example:   "yokanban create board --name test-board",
-	ValidArgs: []string{string(elements.Board), string(elements.Column)},
+	Example:   "yokanban create board --title test-board",
+	ValidArgs: []string{string(elements.Board), string(elements.Column), string(elements.Card)},
 	Args:      cobra.ExactValidArgs(1),
 	Run:       func(cmd *cobra.Command, args []string) {},
 }
@@ -44,10 +44,10 @@ var createCmd = &cobra.Command{
 var createBoardSubCmd = &cobra.Command{
 	Use:     "board",
 	Short:   "Create a yokanban board",
-	Example: "yokanban create board --name test-board",
+	Example: "yokanban create board --title test-board",
 	Run: func(cmd *cobra.Command, args []string) {
 		a := getAPI()
-		body := a.CreateBoard(api.CreateBoardDTO{Name: createName})
+		body := a.CreateBoard(api.CreateBoardDTO{Name: createTitle})
 		fmt.Println(body)
 	},
 }
@@ -56,10 +56,28 @@ var createBoardSubCmd = &cobra.Command{
 var createColumnSubCmd = &cobra.Command{
 	Use:     "column",
 	Short:   "Create a yokanban column",
-	Example: "yokanban create column --name test-column --board-id 605f574e26f0535cfd7fd6cd",
+	Example: "yokanban create column --title test-column --board-id 605f574e26f0535cfd7fd6cd",
 	Run: func(cmd *cobra.Command, args []string) {
 		a := getAPI()
-		details := a.CreateColumn(createOnBoardID, createName, uuid.New())
+		details := a.CreateColumn(createOnBoardID, createTitle, uuid.New())
+
+		// generate the pretty printed output
+		pretty, err := json.MarshalIndent(details, "", "  ")
+		if err != nil {
+			log.Fatal(err)
+		}
+		fmt.Println(string(pretty))
+	},
+}
+
+// createCardSubCmd has the responsibility to create a yokanban card on a board
+var createCardSubCmd = &cobra.Command{
+	Use:     "card",
+	Short:   "Create a yokanban card",
+	Example: "yokanban create card --title test-card --board-id 605f574e26f0535cfd7fd6cd",
+	Run: func(cmd *cobra.Command, args []string) {
+		a := getAPI()
+		details := a.CreateCard(createOnBoardID, createTitle, uuid.New())
 
 		// generate the pretty printed output
 		pretty, err := json.MarshalIndent(details, "", "  ")
@@ -83,7 +101,7 @@ func init() {
 	// is called directly, e.g.:
 	// createCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 
-	createCmd.PersistentFlags().StringVarP(&createName, "name", "n", "", "The name of the resource")
+	createCmd.PersistentFlags().StringVarP(&createTitle, "title", "n", "", "The title of the resource")
 
 	// create board
 	createCmd.AddCommand(createBoardSubCmd)
@@ -92,6 +110,13 @@ func init() {
 	createCmd.AddCommand(createColumnSubCmd)
 	createColumnSubCmd.PersistentFlags().StringVarP(&createOnBoardID, "board-id", "", "", "The id of the board")
 	if err := createColumnSubCmd.MarkPersistentFlagRequired("board-id"); err != nil {
+		log.Error(err)
+	}
+
+	// create card
+	createCmd.AddCommand(createCardSubCmd)
+	createCardSubCmd.PersistentFlags().StringVarP(&createOnBoardID, "board-id", "", "", "The id of the board")
+	if err := createCardSubCmd.MarkPersistentFlagRequired("board-id"); err != nil {
 		log.Error(err)
 	}
 }

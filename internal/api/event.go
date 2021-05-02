@@ -7,7 +7,7 @@ type EventsContainerDTO struct {
 
 // EventDTO represents the exchange format to create yokanban events.
 type EventDTO struct {
-	Type            string            `json:"type"`
-	Events          *[]ColumnEventDTO `json:"events"`
-	SoftwareVersion string            `json:"softwareVersion"`
+	Type            string      `json:"type"`
+	Events          interface{} `json:"events"` // no generics available at the moment :(
+	SoftwareVersion string      `json:"softwareVersion"`
 }

@@ -26,13 +26,13 @@ import (
 )
 
 var updateID string
-var updateName string
+var updateTitle string
 
 // updateCmd represents the update command
 var updateCmd = &cobra.Command{
 	Use:       "update",
 	Short:     "Update yokanban resources like boards, cards, etc.",
-	Example:   "yokanban update board --id 605f526126f0535cfd7fd6c7 --name test-board-update",
+	Example:   "yokanban update board --id 605f526126f0535cfd7fd6c7 --title test-board-update",
 	ValidArgs: []string{string(elements.Board)},
 	Args:      cobra.ExactValidArgs(1),
 	Run:       func(cmd *cobra.Command, args []string) {},
@@ -42,10 +42,10 @@ var updateCmd = &cobra.Command{
 var updateBoardSubCmd = &cobra.Command{
 	Use:     "board",
 	Short:   "Update a yokanban board",
-	Example: "yokanban update board --id 605f526126f0535cfd7fd6c7 --name test-board-update",
+	Example: "yokanban update board --id 605f526126f0535cfd7fd6c7 --title test-board-update",
 	Run: func(cmd *cobra.Command, args []string) {
 		a := getAPI()
-		body := a.UpdateBoard(updateID, api.UpdateBoardDTO{NewName: updateName})
+		body := a.UpdateBoard(updateID, api.UpdateBoardDTO{NewName: updateTitle})
 		fmt.Println(body)
 	},
 }
@@ -68,7 +68,7 @@ func init() {
 		log.Error(err)
 	}
 
-	updateCmd.PersistentFlags().StringVarP(&updateName, "name", "n", "", "The name of the resource")
+	updateCmd.PersistentFlags().StringVarP(&updateTitle, "title", "n", "", "The title of the resource")
 
 	// subCommands
 	updateCmd.AddCommand(updateBoardSubCmd)
