@@ -8,4 +8,5 @@ const (
 	Board  YoElement = "board"
 	Boards YoElement = "boards"
 	Column YoElement = "column"
+	Card   YoElement = "card"
 )

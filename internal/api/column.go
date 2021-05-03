@@ -11,11 +11,12 @@ import (
 )
 
 const (
-	defaultX       float32 = 396.5
-	defaultY       float32 = 112.5
-	defaultWidth   int     = 350
-	defaultHeight  int     = 800
-	defaultOffsetX float32 = 0
+	defaultColumnX       float32 = 396.5
+	defaultColumnY       float32 = 112.5
+	defaultColumnWidth   int     = 350
+	defaultColumnHeight  int     = 800
+	defaultColumnOffsetX float32 = 0
+	defaultColumnZIndex  int     = 1000
 )
 
 // ColumnEventDTO represents the exchange format to create an event for a single yokanban column.
@@ -74,7 +75,7 @@ func (api *API) CreateColumn(boardID string, name string, uuid uuid.UUID) []Crea
 			WipLimit: 0,
 			IsLocked: false,
 			ID:       uuid.String(),
-			ZIndex:   1000,
+			ZIndex:   defaultColumnZIndex,
 		},
 		SoftwareVersion: YoAPPVersion,
 	}
@@ -109,10 +110,10 @@ func (api *API) getShapeDTO(boardID string) ShapeDTO {
 	cols := api.getColumns(boardDetails)
 
 	shape := ShapeDTO{
-		X:      defaultX,
-		Y:      defaultY,
-		Width:  defaultWidth,
-		Height: defaultHeight,
+		X:      defaultColumnX,
+		Y:      defaultColumnY,
+		Width:  defaultColumnWidth,
+		Height: defaultColumnHeight,
 	}
 
 	if len(cols) == 0 {
@@ -126,7 +127,7 @@ func (api *API) getShapeDTO(boardID string) ShapeDTO {
 
 	lastCol := cols[len(cols)-1]
 
-	shape.X = lastCol.Shape.X + float32(lastCol.Shape.Width) + defaultOffsetX
+	shape.X = lastCol.Shape.X + float32(lastCol.Shape.Width) + defaultColumnOffsetX
 	shape.Y = lastCol.Shape.Y
 	shape.Width = lastCol.Shape.Width
 	shape.Height = lastCol.Shape.Height
