@@ -13,5 +13,5 @@ require (
 	github.com/spf13/viper v1.8.1
 	github.com/stretchr/objx v0.1.1 // indirect
 	github.com/stretchr/testify v1.7.0
-	gopkg.in/h2non/gock.v1 v1.1.0
+	gopkg.in/h2non/gock.v1 v1.1.1
 )
